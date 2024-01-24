@@ -86,7 +86,7 @@
 
                 const getColor = (iconName) => {
                     // Assumes no ingredient occurs in multiple sets, and at most 3 sets (which is true at the time of writing this)
-                    var colors = ['purple', 'orange', 'green'];
+                    var colors = ['#1e90ff', '#eb4d4b', '#f1f2f6'];
                     if (!highlightedSet || activeElement === iconName || !isIconHighlighted(iconName)) return 'grey';
                     for (let i = 0; i < highlightedSet.length; i++) {
                         if (highlightedSet[i].includes(iconName)) return colors[i];
