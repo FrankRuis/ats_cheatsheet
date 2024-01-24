@@ -1,0 +1,2 @@
+id,displayName,description,category,sizeX,sizeY,requiredGood1,requiredGood2,requiredGood3,constructionTime,cityScore,movable,initiallyEssential,area,storage,workplace1,workplace2,workplace3,
+Woodcutters Camp,Woodcutters' Camp,Starting point for woodcutters going out into the wild to cut down trees.,Camps,2,2,2 [Mat Processed] Parts,,,15,1,True,False,8,10,Any,Any,Any,

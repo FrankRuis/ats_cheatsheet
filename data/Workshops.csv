@@ -1,0 +1,105 @@
+id,displayName,description,category,sizeX,sizeY,requiredGood1,requiredGood2,requiredGood3,constructionTime,cityScore,movable,initiallyEssential,storage,workplace1,workplace2,workplace3,workplace4,recipe1,recipe2,recipe3,recipe4,
+Alchemist Hut,Alchemist's Hut,"Can produce:  Crystalized Dew, Tea, Wine. 
+Can use: Clearance Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,20,5,False,False,10,Any,Any,,,Crystalized Dew T2,[Needs Fullfilment] Tea T2,[Needs Fullfilment] Wine T2,,
+Apothecary,Apothecary,"Can produce:  Tea, Incense, Biscuits. 
+Can use: Clearance Water.",Industry,3,3,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,20,5,False,False,10,Any,Any,,,[Needs Fullfilment] Tea T2,[Needs Fullfilment] Incense T2,[Needs Fullfilment] Biscuits T2,,
+Artisan,Artisan,"Can produce:  Coats, Barrels, Pack of Luxury Goods. 
+Can use: Clearance Water.",Industry,3,2,8 [Mat Processed] Planks,4 [Mat Processed] Fabric,,40,5,False,False,10,Any,Any,Any,,[Needs Fullfilment] Coats T2,[Vessel] Barrels T2,Pack of Luxury Goods T2,,
+Bakery,Bakery,"Can produce:  Biscuits, Pie, Pottery. 
+Can use: Drizzle Water.",Food Production,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,40,5,False,False,10,Any,Any,,,[Needs Fullfilment] Biscuits T2,[Food Processed] Pie T2,[Vessel] Pottery T2,,
+Beanery,Beanery,"Can produce:  Porridge, Pickled Goods, Crystalized Dew. 
+Can use: Drizzle Water.",Food Production,3,2,8 [Mat Processed] Planks,4 [Mat Processed] Bricks,,50,5,False,False,10,Any,Any,Any,,[Food Processed] Porridge T3,[Food Processed] Pickled Goods T1,Crystalized Dew T1,,
+Brewery,Brewery,"Can produce:  Ale, Pickled Goods, Pack of Crops. 
+Can use: Drizzle Water.",Industry,3,3,2 [Mat Processed] Planks,2 [Mat Processed] Bricks,2 [Mat Processed] Fabric,50,5,False,False,10,Any,Any,,,[Needs Fullfilment] Ale T3,[Food Processed] Pickled Goods T1,Pack of Crops T1,,
+Brick Oven,Brick Oven,"Can produce:  Pie, Coal, Incense. 
+Can use: Drizzle Water.",Food Production,2,2,5 [Mat Processed] Bricks,,,40,5,False,False,10,Any,Any,Any,,[Food Processed] Pie T3,Coal T1,[Needs Fullfilment] Incense T1,,
+Brickyard,Brickyard,"Can produce:  Bricks, Pottery, Crystalized Dew. 
+Can use: Storm Water.",Industry,3,3,8 [Mat Processed] Planks,,,25,5,False,False,10,Any,Any,,,[Building Material] Bricks T3,[Vessel] Pottery T2,Crystalized Dew T1,,
+Butcher,Butcher,"Can produce:  Skewers, Jerky, Oil. 
+Can use: Drizzle Water.",Food Production,3,3,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,40,5,False,False,10,Any,Any,Any,,[Food Processed] Skewers T2,[Food Processed] Jerky T2,Oil T2,,
+Carpenter,Carpenter,"Can produce:  Planks, Tools, Pack of Luxury Goods. 
+Can use: Storm Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,40,5,False,False,10,Any,Any,Any,,[Building Material] Planks T2,Tools Simple T2,Pack of Luxury Goods T2,,
+Cellar,Cellar,"Can produce:  Wine, Pickled Goods, Jerky. 
+Can use: Drizzle Water.",Food Production,2,2,2 [Mat Processed] Bricks,2 [Mat Processed] Fabric,,50,5,False,False,10,Any,Any,,,[Needs Fullfilment] Wine T3,[Food Processed] Pickled Goods T1,[Food Processed] Jerky T1,,
+Clay Pit Workshop,Clay Pit,"Uses Clearance Water to produce  Clay, Reed, regardless of the season. Must be placed on fertile soil.",Camps,2,2,2 [Mat Processed] Planks,2 [Mat Processed] Fabric,,30,5,False,False,10,Any,Any,Any,,[Clay Pit] Clay T2,[Clay Pit] Reeds T2,,,
+Clothier,Clothier,"Can produce:  Coats, Waterskins, Scrolls. 
+Can use: Clearance Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,20,5,False,False,10,Any,Any,,,[Needs Fullfilment] Coats T3,[Vessel] Waterskin T1,[Needs Fullfilment] Scrolls T1,,
+Cookhouse,Cookhouse,"Can produce:  Skewers, Biscuits, Pigment. 
+Can use: Drizzle Water.",Food Production,4,3,8 [Mat Processed] Planks,4 [Mat Processed] Bricks,,50,5,False,False,10,Any,Any,Any,Any,[Food Processed] Skewers T2,[Needs Fullfilment] Biscuits T2,Pigment T2,,
+Cooperage,Cooperage,"Can produce:  Barrels, Coats, Tea. 
+Can use: Clearance Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,40,5,False,False,10,Any,Any,,,[Vessel] Barrels T3,[Needs Fullfilment] Coats T2,[Needs Fullfilment] Tea T1,,
+Crude Workstation,Crude Workstation,"Can produce:  Planks, Fabric, Bricks, Pipes. 
+Can use: Storm Water.",Industry,2,2,5 [Mat Raw] Wood,,,20,2,True,False,5,Any,Any,,,[Building Material] Planks T0,[Building Material] Fabric T0,[Building Material] Bricks T0,Pipe T0,
+Distillery,Distillery,"Can produce:  Wine, Porridge, Barrels. 
+Can use: Drizzle Water.",Industry,3,3,2 [Mat Processed] Planks,2 [Mat Processed] Bricks,2 [Mat Processed] Fabric,50,5,False,False,10,Any,Any,,,[Needs Fullfilment] Wine T2,[Food Processed] Porridge T2,[Vessel] Barrels T2,,
+Druid,Druid's Hut,"Can produce:  Oil, Incense, Coats. 
+Can use: Clearance Water.",Industry,2,2,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,30,5,False,False,10,Any,Any,Any,,Oil T3,[Needs Fullfilment] Incense T1,[Needs Fullfilment] Coats T1,,
+Field Kitchen,Field Kitchen,"Can produce:  Jerky, Porridge, Biscuits, Pickled Goods. 
+Can use: Drizzle Water.",Food Production,2,2,2 [Mat Processed] Planks,2 [Mat Processed] Fabric,,20,5,True,False,5,Any,Any,,,[Food Processed] Jerky T0,[Food Processed] Porridge T0,[Needs Fullfilment] Biscuits T0,[Food Processed] Pickled Goods T0,
+Finesmith,Finesmith,"Can produce:  Amber, Tools. 
+Can use: Storm Water.",Industry,3,3,10 [Mat Processed] Planks,10 [Mat Processed] Bricks,,40,10,False,False,10,Any,Any,Any,,[R] Amber,Tools Simple T3,,,
+Flawless Brewery,Flawless Brewery,"Can produce:  Ale, Pickled Goods, Pack of Crops. Has improved production.
+Can use: Drizzle Water.",Industry,3,3,2 [Mat Processed] Planks,2 [Mat Processed] Bricks,2 [Mat Processed] Fabric,50,5,False,False,10,Any,Any,,,Ruins [Needs Fullfilment] Ale T3,Ruins [Food Processed] Pickled Goods T3,Ruins Pack of Crops T3,,
+Flawless Cellar,Flawless Cellar,"Can produce:  Wine, Pickled Goods, Jerky. Has improved production.
+Can use: Drizzle Water.",Food Production,2,2,2 [Mat Processed] Bricks,2 [Mat Processed] Fabric,,50,5,False,False,10,Any,Any,,,[Needs Fullfilment] Wine T3,[Food Processed] Pickled Goods T3,[Food Processed] Jerky T3,,
+Flawless Cooperage,Flawless Cooperage,"Can produce:  Barrels, Coats, Tea. Has improved production.
+Can use: Clearance Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,40,5,False,False,10,Any,Any,,,[Vessel] Barrels T3,[Needs Fullfilment] Coats T3,[Needs Fullfilment] Tea T3,,
+Flawless Druid,Flawless Druid's Hut,"Can produce:  Oil, Incense, Coats. Has improved production.
+Can use: Clearance Water.",Industry,2,2,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,30,5,False,False,10,Any,Any,Any,,Oil T3,[Needs Fullfilment] Incense T3,[Needs Fullfilment] Coats T3,,
+Flawless Leatherworks,Flawless Leatherworker,"Can produce:  Waterskins, Fabric, Pigment. Has improved production.
+Can use: Clearance Water.",Industry,3,3,2 [Mat Processed] Bricks,2 [Mat Processed] Fabric,,25,5,False,False,10,Any,Any,,,[Vessel] Waterskin T3,[Building Material] Fabric T3,Pigment T3,,
+Flawless Rain Mill,Flawless Rain Mill,"Can produce:  Flour, Scrolls, Pack of Building Materials. Has improved production.
+Can use: Clearance Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,20,5,False,False,10,Any,Any,Any,,Flour T3,[Needs Fullfilment] Scrolls T3,Pack of Building Materials T3,,
+Flawless Smelter,Flawless Smelter,"Can produce:  Copper Bars, Training Gear, Biscuits. 
+Can use: Storm Water.",Industry,3,3,4 [Mat Processed] Bricks,,,40,5,False,False,10,Any,Any,Any,,Copper Bar T3,[Needs Fullfilment] Training Gear T3,[Needs Fullfilment] Biscuits T3,,
+Furnace,Furnace,"Can produce:  Copper Bars, Bricks, Pie. 
+Can use: Storm Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,40,5,False,False,10,Any,Any,Any,,Copper Bar T2,[Building Material] Bricks T2,[Food Processed] Pie T2,,
+Granary,Granary,"Can produce:  Pack of Crops, Pickled Goods, Fabric. 
+Can use: Drizzle Water.",Food Production,2,2,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,30,5,False,False,10,Any,Any,Any,,Pack of Crops T2,[Food Processed] Pickled Goods T2,[Building Material] Fabric T2,,
+Greenhouse Workshop,Greenhouse,"Uses drizzle water to produce  Mushrooms, Herbs, regardless of the season. Must be placed on fertile soil.",Food Production,2,2,2 [Mat Processed] Bricks,2 [Mat Processed] Fabric,,30,5,False,False,10,Any,Any,Any,,[Greenhouse] Mushrooms T2,[Greenhouse] Herbs T2,,,
+Grill,Grill,"Can produce:  Skewers, Copper Bars, Ale. 
+Can use: Drizzle Water.",Food Production,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,40,5,False,False,10,Any,Any,Any,,[Food Processed] Skewers T3,Copper Bar T1,[Needs Fullfilment] Ale T1,,
+Kiln,Kiln,"Can produce:  Coal, Bricks, Jerky. 
+Can use: Storm Water.",Industry,2,2,4 [Mat Processed] Bricks,,,40,5,False,False,10,Any,Any,Any,,Coal T3,[Building Material] Bricks T1,[Food Processed] Jerky T1,,
+Leatherworks,Leatherworker,"Can produce:  Waterskins, Fabric, Pigment. 
+Can use: Clearance Water.",Industry,3,3,2 [Mat Processed] Bricks,2 [Mat Processed] Fabric,,25,5,False,False,10,Any,Any,,,[Vessel] Waterskin T3,[Building Material] Fabric T2,Pigment T2,,
+Lumbermill,Lumber Mill,"Can produce:  Planks, Scrolls, Pack of Trade Goods. 
+Can use: Storm Water.",Industry,3,2,2 [Mat Processed] Bricks,2 [Mat Processed] Fabric,,25,5,False,False,10,Any,Any,,,[Building Material] Planks T3,[Needs Fullfilment] Scrolls T1,Pack of Trade Goods T1,,
+Makeshift Post,Makeshift Post,"Can produce:  Pack of Crops, Pack of Provisions, Pack of Building Materials. 
+Can use: Clearance Water.",Industry,2,2,5 [Mat Raw] Wood,,,20,2,True,False,5,Any,Any,,,Pack of Crops T0,Pack of Provisions T0,Pack of Building Materials T0,,
+Manufactory,Manufactory,"Can produce:  Training Gear, Pigment, Pack of Provisions. 
+Can use: Storm Water.",Industry,3,3,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,50,5,False,False,10,Any,Any,Any,,[Needs Fullfilment] Training Gear T2,Pigment T2,Pack of Provisions T2,,
+Press,Press,"Can produce:  Oil, Flour, Pack of Luxury Goods. 
+Can use: Clearance Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,20,5,False,False,10,Any,Any,Any,,Oil T3,Flour T1,Pack of Luxury Goods T1,,
+Provisioner,Provisioner,"Can produce:  Flour, Barrels, Pack of Provisions. 
+Can use: Clearance Water.",Industry,3,2,8 [Mat Processed] Planks,4 [Mat Processed] Fabric,,40,5,False,False,10,Any,Any,,,Flour T2,[Vessel] Barrels T2,Pack of Provisions T2,,
+Rain Mill,Rain Mill,"Can produce:  Flour, Scrolls, Pack of Building Materials. 
+Can use: Clearance Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,20,5,False,False,10,Any,Any,Any,,Flour T3,[Needs Fullfilment] Scrolls T1,Pack of Building Materials T1,,
+Rainpunk Foundry,Rainpunk Foundry,"A very advanced piece of technology. Can produce  Parts, Wildfire Essence.
+ Can use: Storm Water.",Industry,3,3,8 [Mat Processed] Planks,2 [Mat Processed] Bricks,2 [Mat Processed] Fabric,25,10,False,False,10,Any,Any,Any,,[R] Parts,Hearth Parts T3,,,
+Ranch,Ranch,"Can produce:  Meat, Leather, Eggs. 
+Can use: Drizzle Water.",Food Production,3,3,5 [Mat Processed] Planks,,,40,5,False,False,10,Any,Any,,,Meat (workshop) T1,Leather (workshop) T1,Workshop Eggs T1,,
+Scribe,Scribe,"Can produce:  Scrolls, Ale, Tools. 
+Can use: Clearance Water.",Industry,2,2,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,40,5,False,False,10,Any,Any,Any,,[Needs Fullfilment] Scrolls T3,[Needs Fullfilment] Ale T2,Tools Simple T1,,
+Smelter,Smelter,"Can produce:  Copper Bars, Training Gear, Biscuits. 
+Can use: Storm Water.",Industry,3,3,4 [Mat Processed] Bricks,,,40,5,False,False,10,Any,Any,Any,,Copper Bar T3,[Needs Fullfilment] Training Gear T2,[Needs Fullfilment] Biscuits T1,,
+Smithy,Smithy,"Can produce:  Tools, Pipes, Pack of Trade Goods. 
+Can use: Storm Water.",Industry,3,3,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,50,5,False,False,10,Any,Any,,,Tools Simple T2,Pipe T2,Pack of Trade Goods T2,,
+Smokehouse,Smokehouse,"Can produce:  Jerky, Pottery, Incense. 
+Can use: Drizzle Water.",Food Production,3,3,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,50,5,False,False,10,Any,Any,Any,,[Food Processed] Jerky T3,[Vessel] Pottery T1,[Needs Fullfilment] Incense T1,,
+Stamping Mill,Stamping Mill,"Can produce:  Pottery, Flour, Copper Bars. 
+Can use: Clearance Water.",Industry,2,2,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,20,5,False,False,10,Any,Any,,,[Vessel] Pottery T3,Flour T2,Copper Bar T1,,
+Supplier,Supplier,"Can produce:  Flour, Planks, Waterskins. 
+Can use: Clearance Water.",Industry,3,3,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,50,5,False,False,10,Any,Any,,,Flour T2,[Building Material] Planks T2,[Vessel] Waterskin T2,,
+Tea House,Teahouse,"Can produce:  Tea, Porridge, Waterskins. 
+Can use: Drizzle Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,20,5,False,False,10,Any,Any,,,[Needs Fullfilment] Tea T3,[Food Processed] Porridge T2,[Vessel] Waterskin T1,,
+Tinctury,Tinctury,"Can produce:  Ale, Wine, Pigment. 
+Can use: Drizzle Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,40,5,False,False,10,Any,Any,,,[Needs Fullfilment] Ale T2,[Needs Fullfilment] Wine T2,Pigment T2,,
+Tinkerer,Tinkerer,"Can produce:  Tools, Training Gear, Pack of Building Materials. 
+Can use: Storm Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Bricks,,50,5,False,False,10,Any,Any,Any,,Tools Simple T2,[Needs Fullfilment] Training Gear T2,Pack of Building Materials T2,,
+Toolshop,Toolshop,"Can produce:  Tools, Pipes, Barrels. 
+Can use: Storm Water.",Industry,3,2,5 [Mat Processed] Planks,2 [Mat Processed] Fabric,,40,5,False,False,10,Any,Any,,,Tools Simple T3,Pipe T2,[Vessel] Barrels T1,,
+Weaver,Weaver,"Can produce:  Fabric, Training Gear, Pack of Trade Goods. 
+Can use: Clearance Water.",Industry,3,2,8 [Mat Processed] Planks,,,40,5,False,False,10,Any,Any,,,[Building Material] Fabric T3,[Needs Fullfilment] Training Gear T1,Pack of Trade Goods T1,,
+Workshop,Workshop,"Can produce:  Planks, Fabric, Bricks, Pipes. 
+Can use: Storm Water.",Industry,3,3,4 [Mat Processed] Planks,4 [Mat Processed] Bricks,4 [Mat Processed] Fabric,20,5,False,False,10,Any,Any,,,[Building Material] Planks T2,[Building Material] Fabric T2,[Building Material] Bricks T2,Pipe T0,

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Against the Storm Cheatsheet</title>
+    <link rel="icon" href="img/ats.ico"/>
+	<link rel="stylesheet" href="css/style.css">
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/javascript" src="js/goods.json"></script>
+</head>
+<body>
+    <div class="content">
+        <h1 id="firstHeading" class="firstHeading mw-first-heading"><span class="mw-page-title-main">Against the Storm Cheatsheet</span></h1>
+
+        <div class="container-block">
+            <!-- Ingredient grid -->
+            <div class="container-block-item" id="ingredients-root"></div>
+
+            <!-- Species needs -->
+            <div class="container-block-item" id="needs-root"></div>
+        </div>
+
+        <!-- React code -->
+        <script type="text/babel">
+            const { useState, useEffect } = React;
+            
+            // Parse the json string from the goods.json file that we loaded in the html head section
+            const GOODS = JSON.parse(goods_data);
+            const NEEDS = ['Porridge', 'Biscuits', 'Pie', 'Jerky', 'Skewers', 'Coats', 'Leisure', 'Religion', 'Education', 'Luxury', 'Brawling', 'Treatment']
+            const SPECIES = {
+                'Human': ['Porridge', 'Biscuits', 'Pie', 'Coats', 'Leisure', 'Religion'],
+                'Beaver': ['Pickled Goods', 'Biscuits', 'Coats', 'Leisure', 'Education', 'Luxury'],
+                'Harpy': ['Jerky', 'Biscuits', 'Education', 'Pie', 'Coats', 'Treatment'],
+                'Lizard': ['Jerky', 'Pickled Goods', 'Pie', 'Skewers', 'Brawling', 'Religion'],
+                'Fox': ['Porridge', 'Pickled Goods', 'Treatment', 'Skewers', 'Brawling', 'Luxury']
+            }
+            const SPECIES_ICONS = {
+                'Human': 'img/species/Human_Portrait.png',
+                'Beaver': 'img/species/Beaver_Portrait.png',
+                'Harpy': 'img/species/Harpy_Portrait.png',
+                'Lizard': 'img/species/Lizard_Portrait.png',
+                'Fox': 'img/species/Fox_Portrait.png',
+                'Biscuits': 'img/goods/Icon_Resource_Biscuits.png',
+                'Pie': 'img/goods/Icon_Resource_Pie.png',
+                'Porridge': 'img/goods/Icon_Resource_Porridge.png',
+                'Jerky': 'img/goods/Icon_Resource_Jerky.png',
+                'Skewers': 'img/goods/Icon_Resource_Skewers.png',
+                'Luxury': 'img/goods/Icon_Resource_Wine.png',
+                'Leisure': 'img/goods/Icon_Resource_Ale.png',
+                'Treatment': 'img/goods/Icon_Resource_Tea.png',
+                'Education': 'img/goods/Icon_Resource_Scrolls.png',
+                'Brawling': 'img/goods/Icon_Resource_TrainingGear.png',
+                'Religion': 'img/goods/Icon_Resource_Incense.png',
+                'Coats': 'img/goods/Icon_Resource_Coats.png'
+            }
+
+            // Ingredients
+            const IngredientGrid = ({ rows, columns }) => {
+                const [highlightedSet, setHighlightedSet] = useState(null);
+                const [activeElement, setActiveElement] = useState(null);
+
+                const handleIconClick = (iconName) => {
+                    const newHighlightedSet = document.getElementById('reverse-ingredients').checked ? GOODS[iconName]['reverse_set'] : GOODS[iconName]['ingredient_sets'];
+                    if (highlightedSet) {
+                        if (highlightedSet.includes(iconName) || activeElement === iconName) {
+                            setHighlightedSet(null);
+                            setActiveElement(null);
+                        } else {
+                            setHighlightedSet(newHighlightedSet);
+                            setActiveElement(iconName);
+                        }
+                    } else {
+                        setHighlightedSet(newHighlightedSet);
+                        setActiveElement(iconName);
+                    }
+                };
+
+                const isIconHighlighted = (iconName) => {
+                    if (!highlightedSet || !activeElement) return true;
+                    return highlightedSet.flat().includes(iconName) || activeElement === iconName;
+                };
+
+                const getColor = (iconName) => {
+                    // Assumes no ingredient occurs in multiple sets, and at most 3 sets (which is true at the time of writing this)
+                    var colors = ['purple', 'orange', 'green'];
+                    if (!highlightedSet || activeElement === iconName || !isIconHighlighted(iconName)) return 'grey';
+                    for (let i = 0; i < highlightedSet.length; i++) {
+                        if (highlightedSet[i].includes(iconName)) return colors[i];
+                    }
+                    return 'grey';
+                };
+
+                // Generate grid layout from the GOODS keys
+                const goodsNames = Object.keys(GOODS);
+                const grid = [];
+                let index = 0;
+
+                for (let i = 0; i < rows; i++) {
+                    const row = [];
+                    for (let j = 0; j < columns && index < goodsNames.length; j++) {
+                    row.push(goodsNames[index]);
+                    index++;
+                    }
+                    grid.push(row);
+                }
+
+                return (
+                    <div className="ats-container-recipe icon-grid">
+                    <div className="grid-header ats-infobox-header-title">
+                        {"Ingredient Grid"}
+                        <label className="switch tooltip">
+                            <span className="tooltiptext">Reverse</span>
+                            <input type="checkbox" id="reverse-ingredients" />
+                            <span className="slider slider-round"></span>
+                        </label>
+                    </div>
+                    <div className="icon-grid-wrapper">
+                    {grid.map((row, rowIndex) => (
+                        <div key={rowIndex} className="icon-row">
+                        {row.map((iconName) => (
+                            <div
+                            key={iconName}
+                            className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
+                            onClick={() => handleIconClick(iconName)}
+                            style={{ borderTop: (isIconHighlighted(iconName) && activeElement && activeElement != iconName) ? '5px solid ' + getColor(iconName) : '5px solid rgba(0, 0, 0, 0)' }}
+                            >
+                            <img src={GOODS[iconName]['icon_path']} alt={iconName} />
+                            </div>
+                        ))}
+                        </div>
+                    ))}
+                    </div>
+                    </div>
+                );
+            };
+
+            // Needs
+            const NeedsGrid = ({ rows, columns }) => {
+                const [highlightedSet, setHighlightedSet] = useState(null);
+                const [activeSpecies, setActiveSpecies] = useState(null);
+
+                const getColors = (iconName) => {
+                    if (!highlightedSet || !activeSpecies) return [];
+                    var colors = ['purple', 'orange', 'green'];
+                    var active_colors = [];
+                    for (let i = 0; i < highlightedSet.length; i++) {
+                        if (highlightedSet[i].includes(iconName)) active_colors.push(colors[i]);
+                    }
+
+                    return active_colors;
+                }
+
+                const getLinearGradient = (colors) => {
+                    let gradient = 'linear-gradient(to right';
+                    const percentage = 100 / colors.length;
+
+                    colors.forEach((color, index) => {
+                        gradient += `, ${color} ${percentage * index}%, ${color} ${percentage * (index + 1)}%`;
+                    });
+
+                    gradient += ')';
+                    return gradient;
+                }
+
+                const handleIconClick = (iconName) => {
+                    var newActiveSpecies = activeSpecies;
+                    if (activeSpecies) {
+                        if (activeSpecies.includes(iconName)) {
+                            if (activeSpecies.length == 1) {
+                                newActiveSpecies = null;
+                                setActiveSpecies(newActiveSpecies);
+                            } else {
+                                newActiveSpecies.splice(newActiveSpecies.indexOf(iconName), 1);
+                                setActiveSpecies(newActiveSpecies);
+                            }
+                        } else {
+                            if (activeSpecies.length >= 3) return;  // max 3 species per game
+                            newActiveSpecies.push(iconName);
+                            setActiveSpecies(newActiveSpecies);
+                        }
+                    } else {
+                        newActiveSpecies = [iconName];
+                        setActiveSpecies(newActiveSpecies);
+                    }
+                    highlightNeeds(newActiveSpecies);
+                };
+
+                const highlightNeeds = (newActiveSpecies) => {
+                    var newHighlightedSet = null;
+                    if (newActiveSpecies) {
+                        for (const iconName of newActiveSpecies) {
+                            var names = SPECIES[iconName];
+                            names.push(iconName);
+                            if (!newHighlightedSet) {
+                                newHighlightedSet = [names];
+                            } else {
+                                newHighlightedSet.push(names);
+                            }
+                        }
+                    }
+                    setHighlightedSet(newHighlightedSet);
+                }
+
+                const isIconHighlighted = (iconName) => {
+                    if (!highlightedSet || !activeSpecies) return true;
+                    return highlightedSet.flat().includes(iconName) || activeSpecies.includes(iconName);
+                };
+
+                // Generate grid layout from the SPECIES keys
+                const speciesNames = Object.keys(SPECIES);
+                const grid = [];
+                let index = 0;
+
+                for (let i = 0; i < rows; i++) {
+                    const row = [];
+                    if (i == 0) {
+                        for (let j = 0; j < columns && index < speciesNames.length; j++) {
+                            row.push(speciesNames[index]);
+                            index++;
+                        }
+                        index = 0;
+                    } else {
+                        for (let j = 0; j < columns && index < NEEDS.length; j++) {
+                            row.push(NEEDS[index]);
+                            index++;
+                        }
+                    }
+                    grid.push(row);
+                }
+
+                return (
+                    <div className="ats-container-recipe icon-grid">
+                    <div className="grid-header ats-infobox-header-title">
+                        {"Species Needs"}
+                    </div>
+                    <div className="icon-grid-wrapper">
+                    {grid.map((row, rowIndex) => (
+                        <div key={rowIndex} className="icon-row">
+                        {row.map((iconName) => (
+                            <div
+                            key={iconName}
+                            className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
+                            onClick={() => handleIconClick(iconName)}
+                            style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: activeSpecies ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
+                            >
+                            <img src={SPECIES_ICONS[iconName]} alt={iconName} />
+                            </div>
+                        ))}
+                        </div>
+                    ))}
+                    </div>
+                    </div>
+                );
+            };
+
+            ReactDOM.render(<IngredientGrid rows={8} columns={8} />, document.getElementById('ingredients-root'));
+            ReactDOM.render(<NeedsGrid rows={4} columns={5} />, document.getElementById('needs-root'));
+        </script>
+    </div>
+</body>
+</html>
