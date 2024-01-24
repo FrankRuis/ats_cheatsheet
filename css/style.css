@@ -131,6 +131,7 @@ img {
 
 .header-row {
     border-bottom: solid 4px #4f3c21;
+    margin-bottom: 5px;
 }
 
 /* Recipe Table */
@@ -144,6 +145,7 @@ div.ats-container-recipe {
     border-image-repeat: round;
     border-image-outset: 0px 6px 0px 6px;
     padding: 0px 12px 0px 12px;
+    max-width: 670px;
 }
 
 table.ats-table-recipe {
@@ -415,4 +417,22 @@ input:checked + .slider:before {
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
-  
+
+/* Legend */
+.grid-legend {
+    display: block;
+    margin: auto;
+    margin-left: -10px;
+    margin-right: -10px;
+    background-color: rgba(0,0,0,0.20);
+    padding: 5px 10px 15px 10px;
+    width: 100%;
+    max-width: 100%;
+    white-space: wrap;
+}
+
+.legend-text {
+    color: var(--ats-default, #e0e0d0);
+    font-variant: small-caps;
+    font-size: 14pt;
+}

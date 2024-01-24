@@ -134,6 +134,9 @@
                         </div>
                     ))}
                     </div>
+                        <div className='grid-legend'>
+                            <span className='legend-text'>For recipes, pick one of each highlighted color group.</span>
+                        </div>
                     </div>
                 );
             };
@@ -239,13 +242,13 @@
                     </div>
                     <div className="icon-grid-wrapper">
                     {grid.map((row, rowIndex) => (
-                        <div key={rowIndex} className="icon-row">
+                        <div key={rowIndex} className={`icon-row${ rowIndex == 0 ? ' header-row' : '' }`}>
                         {row.map((iconName) => (
                             <div
                             key={iconName}
                             className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
                             onClick={() => handleIconClick(iconName)}
-                            style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: activeSpecies ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
+                            style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: (isIconHighlighted(iconName) && activeSpecies) ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
                             >
                             <img src={SPECIES_ICONS[iconName]} alt={iconName} />
                             </div>
