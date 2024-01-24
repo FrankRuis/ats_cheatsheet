@@ -391,13 +391,14 @@ input:checked + .slider:before {
     text-align: center;
     padding: 5px 0;
     border-radius: 6px;
+    font-size: 18px;
 
     position: absolute;
     z-index: 1;
-    width: 120px;
+    width: 250px;
     bottom: 130%;
     left: 50%;
-    margin-left: -60px;
+    margin-left: -125px;
 }
 
 .tooltip .tooltiptext::after {
