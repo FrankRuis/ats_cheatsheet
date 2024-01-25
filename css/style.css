@@ -97,10 +97,14 @@ img {
 
 .container-block {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
 }
 
 .container-block-item {
-    margin: auto;
+    margin: 50px;
 }
 
 /* Icons */
@@ -136,7 +140,7 @@ img {
 
 /* Recipe Table */
 
-div.ats-container-recipe {
+div.ats-container {
     display: inline-block;
     border: 0px solid transparent;
     border-image-source: url(../img/Skin_BG_Small_3.png);
@@ -145,7 +149,7 @@ div.ats-container-recipe {
     border-image-repeat: round;
     border-image-outset: 0px 6px 0px 6px;
     padding: 0px 12px 0px 12px;
-    max-width: 670px;
+    max-width: 675px;
 }
 
 table.ats-table-recipe {
@@ -274,6 +278,7 @@ td:has(> div.ats-building-icon) {
 
 .icon-row {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .icon {
@@ -379,21 +384,24 @@ input:checked + .slider:before {
 }
 
 /* Tooltip */
+
 .tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted var(--ats-dark-brown, #302513);
 }
 
 .tooltip .tooltiptext {
     visibility: hidden;
     width: 120px;
-    background-color: var(--ats-dark-brown, #302513);
-    color: #fff;
     text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
     font-size: 18px;
+
+    display: flex;
+    color: #b0b6b2;
+    font-weight: bold;
+    background-color: #081007;
+    border: 2.5px ridge #93775d;
+    padding: 15px;
 
     position: absolute;
     z-index: 1;
@@ -403,22 +411,12 @@ input:checked + .slider:before {
     margin-left: -125px;
 }
 
-.tooltip .tooltiptext::after {
-    content: " ";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: var(--ats-dark-brown, #302513) transparent transparent transparent;
-  }
-
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
 
 /* Legend */
+
 .grid-legend {
     display: block;
     margin: auto;
@@ -435,4 +433,16 @@ input:checked + .slider:before {
     color: var(--ats-default, #e0e0d0);
     font-variant: small-caps;
     font-size: 14pt;
+}
+
+/* Font awesome icons */
+
+h1 > a > .svg-inline--fa {
+    font-size: 20pt;
+    color: var(--ats-gold, #a79372);
+    float: right;
+}
+
+h1 > a > .svg-inline--fa:hover {
+    color: var(--ats-default, #e0e0d0);
 }

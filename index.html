@@ -6,6 +6,8 @@
     <title>Against the Storm Cheatsheet</title>
     <link rel="icon" href="img/ats.ico"/>
 	<link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
     <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -13,7 +15,7 @@
 </head>
 <body>
     <div class="content">
-        <h1 id="firstHeading" class="firstHeading mw-first-heading"><span class="mw-page-title-main">Against the Storm Cheatsheet</span></h1>
+        <h1 id="firstHeading" class="firstHeading mw-first-heading"><span class="mw-page-title-main">Against the Storm Cheatsheet</span> <a href="https://github.com/FrankRuis/ats_cheatsheet" target="_blank"><i class="fa-brands fa-github"></i></a></h1>
 
         <div class="container-block">
             <!-- Ingredient grid -->
@@ -109,7 +111,7 @@
                 }
 
                 return (
-                    <div className="ats-container-recipe icon-grid">
+                    <div className="ats-container icon-grid">
                     <div className="grid-header ats-infobox-header-title">
                         {"Ingredient Grid"}
                         <label className="switch tooltip">
@@ -119,21 +121,21 @@
                         </label>
                     </div>
                     <div className="icon-grid-wrapper">
-                    {grid.map((row, rowIndex) => (
-                        <div key={rowIndex} className="icon-row">
-                        {row.map((iconName) => (
-                            <div
-                            key={iconName}
-                            className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
-                            onClick={() => handleIconClick(iconName)}
-                            style={{ borderTop: (isIconHighlighted(iconName) && activeElement && activeElement != iconName) ? '5px solid ' + getColor(iconName) : '5px solid rgba(0, 0, 0, 0)' }}
-                            id={iconName}
-                            >
-                            <img src={GOODS[iconName]['icon_path']} alt={iconName} />
-                            </div>
-                        ))}
+                        <div className="icon-row">
+                            {grid.map((row, rowIndex) => (
+                                row.map((iconName) => (
+                                    <div
+                                    key={iconName}
+                                    className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
+                                    onClick={() => handleIconClick(iconName)}
+                                    style={{ borderTop: (isIconHighlighted(iconName) && activeElement && activeElement != iconName) ? '5px solid ' + getColor(iconName) : '5px solid rgba(0, 0, 0, 0)' }}
+                                    id={iconName}
+                                    >
+                                    <img src={GOODS[iconName]['icon_path']} alt={iconName} />
+                                    </div>
+                                ))
+                            ))}
                         </div>
-                    ))}
                     </div>
                         <div className='grid-legend'>
                             <span className='legend-text'>For recipes, pick one of each highlighted color group.</span>
@@ -223,6 +225,7 @@
 
                 // Generate grid layout from the SPECIES keys
                 const speciesNames = Object.keys(SPECIES);
+                const grid_header = [];
                 const grid = [];
                 let index = 0;
 
@@ -234,36 +237,53 @@
                             index++;
                         }
                         index = 0;
+                        grid_header.push(row);
                     } else {
                         for (let j = 0; j < columns && index < NEEDS.length; j++) {
                             row.push(NEEDS[index]);
                             index++;
                         }
+                        grid.push(row);
                     }
-                    grid.push(row);
                 }
 
                 return (
-                    <div className="ats-container-recipe icon-grid">
-                    <div className="grid-header ats-infobox-header-title">
-                        {"Species Needs"}
-                    </div>
-                    <div className="icon-grid-wrapper">
-                    {grid.map((row, rowIndex) => (
-                        <div key={rowIndex} className={`icon-row${ rowIndex == 0 ? ' header-row' : '' }`}>
-                        {row.map((iconName) => (
-                            <div
-                            key={iconName}
-                            className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
-                            onClick={() => handleIconClick(iconName)}
-                            style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: (isIconHighlighted(iconName) && activeSpecies) ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
-                            >
-                            <img src={SPECIES_ICONS[iconName]} alt={iconName} />
-                            </div>
-                        ))}
+                    <div className="ats-container icon-grid" style={{maxWidth: '425px'}}>
+                        <div className="grid-header ats-infobox-header-title">
+                            {"Species Needs"}
                         </div>
-                    ))}
-                    </div>
+                        <div className="icon-grid-wrapper">
+                            {grid_header.map((row, rowIndex) => (
+                                <div key={rowIndex} className={`icon-row${ rowIndex == 0 ? ' header-row' : '' }`}>
+                                {row.map((iconName) => (
+                                    <div
+                                    key={iconName}
+                                    className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
+                                    onClick={() => handleIconClick(iconName)}
+                                    style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: (isIconHighlighted(iconName) && activeSpecies) ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
+                                    >
+                                        <img src={SPECIES_ICONS[iconName]} alt={iconName} />
+                                    </div>
+                                ))}
+                                </div>
+                            ))}
+
+                            <div className='icon-row'>
+                                {grid.map((row, rowIndex) => (
+                                    row.map((iconName) => (
+                                        <div
+                                        key={iconName}
+                                        className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
+                                        onClick={() => handleIconClick(iconName)}
+                                        style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: (isIconHighlighted(iconName) && activeSpecies) ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
+                                        >
+                                            <img src={SPECIES_ICONS[iconName]} alt={iconName} />
+                                        </div>
+                                    ))
+                                ))}
+                            </div>
+
+                        </div>
                     </div>
                 );
             };
