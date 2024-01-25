@@ -46,8 +46,13 @@ body {
     background-size: auto,auto,auto,cover;
     background-attachment: fixed;
     text-align: center;
-    /* margin: 50px; */
 }
+
+@media only screen and (min-width: 1024px) {
+    body {
+        margin: 50px;
+    }
+  }
 
 div.content {
     background: #f8f9fa;
