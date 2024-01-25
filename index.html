@@ -127,6 +127,7 @@
                             className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
                             onClick={() => handleIconClick(iconName)}
                             style={{ borderTop: (isIconHighlighted(iconName) && activeElement && activeElement != iconName) ? '5px solid ' + getColor(iconName) : '5px solid rgba(0, 0, 0, 0)' }}
+                            id={iconName}
                             >
                             <img src={GOODS[iconName]['icon_path']} alt={iconName} />
                             </div>
@@ -170,6 +171,13 @@
                 }
 
                 const handleIconClick = (iconName) => {
+                    if (!(iconName in SPECIES)) {
+                        var trans = {'Treatment': 'Tea', 'Leisure': 'Ale', 'Luxury': 'Wine', 'Brawling': 'Training Gear', 'Religion': 'Incense', 'Education': 'Scrolls'}
+                        if (iconName in trans) iconName = trans[iconName];
+                        document.getElementById(iconName).click()
+                        return;
+                    }
+
                     var newActiveSpecies = activeSpecies;
                     if (activeSpecies) {
                         if (activeSpecies.includes(iconName)) {
