@@ -46,16 +46,14 @@ body {
     background-size: auto,auto,auto,cover;
     background-attachment: fixed;
     text-align: center;
-    margin: 50px;
+    /* margin: 50px; */
 }
 
 div.content {
     background: #f8f9fa;
     border: solid #eaecf0;
     border-width: 1px 1px 0.2em;
-    padding: 1.25em 1.75em;
     box-shadow: 0 1px 2px 1px rgba(0,0,0,0.02);
-    padding: 1em 2em 3em;
     background-color: var(--ats-dark,black);
     border: 2px solid var(--ats-brown,dimgray);
 }
@@ -104,7 +102,7 @@ img {
 }
 
 .container-block-item {
-    margin: 50px;
+    margin: 10px;
 }
 
 /* Icons */
@@ -150,6 +148,7 @@ div.ats-container {
     border-image-outset: 0px 6px 0px 6px;
     padding: 0px 12px 0px 12px;
     max-width: 675px;
+    min-width: 255px;
 }
 
 table.ats-table-recipe {
@@ -441,6 +440,7 @@ h1 > a > .svg-inline--fa {
     font-size: 20pt;
     color: var(--ats-gold, #a79372);
     float: right;
+    padding: 10px 15px 0px 0px
 }
 
 h1 > a > .svg-inline--fa:hover {
