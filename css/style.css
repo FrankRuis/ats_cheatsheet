@@ -48,11 +48,11 @@ body {
     text-align: center;
 }
 
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 768px) {
     body {
         margin: 50px;
     }
-  }
+}
 
 div.content {
     background: #f8f9fa;
@@ -153,7 +153,7 @@ div.ats-container {
     border-image-outset: 0px 6px 0px 6px;
     padding: 0px 12px 0px 12px;
     max-width: 675px;
-    min-width: 420px;
+    min-width: 250px;
 }
 
 table.ats-table-recipe {
@@ -292,14 +292,26 @@ td:has(> div.ats-building-icon) {
     margin: 5px;
     padding: 10px;
     cursor: pointer;
-    user-select: none; /* Prevents text selection */
+    user-select: none;
 }
 
 .icon img {
-    width: 50px; /* Set desired image size */
+    width: 50px; 
     height: 50px;
     object-fit: contain;
 }
+
+@media only screen and (max-width: 767px) {
+    .icon {
+        padding: 5px;
+    }
+
+    .icon img {
+        width: 25px;
+        height: 25px;
+    }
+}
+
 
 .icon-inactive {
     opacity: 0.2;
