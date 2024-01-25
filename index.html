@@ -131,7 +131,7 @@
                                     style={{ borderTop: (isIconHighlighted(iconName) && activeElement && activeElement != iconName) ? '5px solid ' + getColor(iconName) : '5px solid rgba(0, 0, 0, 0)' }}
                                     id={iconName}
                                     >
-                                    <img src={GOODS[iconName]['icon_path']} alt={iconName} />
+                                    <img src={GOODS[iconName]['icon_path']} alt={iconName} title={iconName} />
                                     </div>
                                 ))
                             ))}
@@ -262,7 +262,7 @@
                                     onClick={() => handleIconClick(iconName)}
                                     style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: (isIconHighlighted(iconName) && activeSpecies) ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
                                     >
-                                        <img src={SPECIES_ICONS[iconName]} alt={iconName} />
+                                        <img src={SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
                                     </div>
                                 ))}
                                 </div>
@@ -277,7 +277,7 @@
                                         onClick={() => handleIconClick(iconName)}
                                         style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: (isIconHighlighted(iconName) && activeSpecies) ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
                                         >
-                                            <img src={SPECIES_ICONS[iconName]} alt={iconName} />
+                                            <img src={SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
                                         </div>
                                     ))
                                 ))}
