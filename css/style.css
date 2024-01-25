@@ -237,6 +237,12 @@ td:has(> div.ats-building-icon) {
     margin: 0 2px 0 2px;
 }
 
+@media only screen and (max-width: 767px) {
+    .ats-table-recipe .ats-building-icon img, .ats-table-recipe .ats-single-ingredient-icon img, .icon-row .ats-single-ingredient-icon img, .ats-table-recipe .ats-product-icon img {
+        border-image-slice: 5;
+    }
+}
+
 .ats-building-icon img {
     display: block;
 }
