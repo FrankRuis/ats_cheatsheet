@@ -139,6 +139,7 @@ img {
 .header-row {
     border-bottom: solid 4px #4f3c21;
     margin-bottom: 5px;
+    justify-content: center;
 }
 
 /* Recipe Table */
