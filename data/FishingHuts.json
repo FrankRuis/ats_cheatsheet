@@ -1,0 +1,102 @@
+[
+    {
+        "bait": {
+            "name": "[Other] Fishing Bait",
+            "amount": 5
+        },
+        "baitIngredient": {
+            "name": "[Packs] Pack of Crops",
+            "amount": 1
+        },
+        "baitMultiplier": 2,
+        "area": 6,
+        "recipes": [
+            {
+                "seekedDeposits": "[Food Raw] Fish",
+                "grade": "Grade2",
+                "gatheringTime": 15
+            },
+            {
+                "seekedDeposits": "[Mat Raw] Scales",
+                "grade": "Grade2",
+                "gatheringTime": 8
+            },
+            {
+                "seekedDeposits": "[Mat Raw] Algae",
+                "grade": "Grade2",
+                "gatheringTime": 8
+            }
+        ],
+        "id": "Fishing Hut",
+        "displayName": "Fishing Hut",
+        "description": "An advanced fishing hut. Can fish in large fishing ponds in addition to small ones. Can catch:  \u003Csprite name=[food raw] fish\u003E Fish (\u003Csprite name=grade2\u003E), \u003Csprite name=[mat raw] scales\u003E Scales (\u003Csprite name=grade2\u003E), \u003Csprite name=[mat raw] algae\u003E Algae (\u003Csprite name=grade2\u003E).",
+        "category": "Resource Gathering",
+        "sizeX": 2,
+        "sizeY": 2,
+        "requiredGoods": [
+            {
+                "name": "[Mat Raw] Wood",
+                "amount": 10
+            },
+            {
+                "name": "[Mat Processed] Parts",
+                "amount": 3
+            }
+        ],
+        "constructionTime": 14,
+        "cityScore": 1,
+        "movable": true,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "bait": {
+            "name": "[Other] Fishing Bait",
+            "amount": 5
+        },
+        "baitIngredient": {
+            "name": "[Packs] Pack of Crops",
+            "amount": 1
+        },
+        "baitMultiplier": 2,
+        "area": 6,
+        "recipes": [
+            {
+                "seekedDeposits": "[Food Raw] Fish",
+                "grade": "Grade1",
+                "gatheringTime": 20
+            },
+            {
+                "seekedDeposits": "[Mat Raw] Scales",
+                "grade": "Grade1",
+                "gatheringTime": 12
+            },
+            {
+                "seekedDeposits": "[Mat Raw] Algae",
+                "grade": "Grade1",
+                "gatheringTime": 12
+            }
+        ],
+        "id": "Primitive Fishing Hut",
+        "displayName": "Small Fishing Hut",
+        "description": "A crude version of a normal fishing hut. It's slower, and can only fish in small fishing ponds. Can catch:  \u003Csprite name=[food raw] fish\u003E Fish (\u003Csprite name=grade1\u003E), \u003Csprite name=[mat raw] scales\u003E Scales (\u003Csprite name=grade1\u003E), \u003Csprite name=[mat raw] algae\u003E Algae (\u003Csprite name=grade1\u003E).",
+        "category": "Resource Gathering",
+        "sizeX": 2,
+        "sizeY": 2,
+        "requiredGoods": [
+            {
+                "name": "[Mat Raw] Wood",
+                "amount": 10
+            },
+            {
+                "name": "[Mat Processed] Parts",
+                "amount": 3
+            }
+        ],
+        "constructionTime": 14,
+        "cityScore": 1,
+        "movable": true,
+        "initiallyEssential": false,
+        "workplaces": 3
+    }
+]

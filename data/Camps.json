@@ -1,0 +1,68 @@
+[
+    {
+        "area": 8,
+        "storage": 10,
+        "recipes": [
+            {
+                "seekedResource": "[Mat Raw] Wood",
+                "gatheringTime": 6
+            }
+        ],
+        "id": "Woodcutters Camp",
+        "displayName": "Woodcutters' Camp",
+        "description": "Starting point for woodcutters going out into the wild to cut down trees.",
+        "category": "Resource Gathering",
+        "sizeX": 2,
+        "sizeY": 2,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Parts",
+                "amount": 2
+            }
+        ],
+        "constructionTime": 15,
+        "cityScore": 1,
+        "movable": true,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "area": 8,
+        "storage": 10,
+        "recipes": [
+            {
+                "seekedResource": "[Crafting] Coal",
+                "gatheringTime": 40
+            },
+            {
+                "seekedResource": "[Metal] Copper Ore",
+                "gatheringTime": 40
+            }
+        ],
+        "id": "Mine",
+        "displayName": "Mine",
+        "description": "Can only be placed on coal and ore veins. Digs up copper ore and coal.",
+        "category": "Extraction Building",
+        "sizeX": 3,
+        "sizeY": 3,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 2
+            },
+            {
+                "name": "[Mat Processed] Bricks",
+                "amount": 4
+            },
+            {
+                "name": "[Mat Processed] Parts",
+                "amount": 2
+            }
+        ],
+        "constructionTime": 15,
+        "cityScore": 1,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 4
+    }
+]

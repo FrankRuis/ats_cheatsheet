@@ -4,57 +4,42 @@ import numpy as np
 import pandas as pd
 
 goods = pd.read_csv('../data/Goods.csv', quotechar='"')
-recipes = pd.read_csv('../data/Workshops_Recipes.csv', quotechar='"')
 
 # Goods Data
-filt = re.compile('(\s*\[.+?\]\s*)|(\s*Ruins\s*)|(\s*\(.+?\)\s*)|(\s*T[0-9]\s*)')
+filt = re.compile(r'(\s*\[.+?\]\s*)|(\s*Ruins\s*)|(\s*\(.+?\)\s*)|(\s*T[0-9]\s*)')
 columns = list(goods.columns[1:-1])
 goods_data = {}
 for i, name in enumerate(goods.loc[:, 'id']):
     if not '_Meta' in name:
         good_name = filt.sub('', name).strip()
         goods_data[good_name] = {col: goods.loc[i, col] for col in columns}
+        goods_data[good_name]['description'] = goods_data[good_name]['description'].split('\r')[0].strip()
 
 # Recipe Data
-columns = list(recipes.columns[1:-1])
+with open('../data/Workshops.json') as file:
+    workshops = json.load(file)
+
 recipe_data = {}
-for i, name in enumerate(recipes.loc[:, 'id']):
-    grade = name.split(' ')[-1]
-    if grade[0] != 'T' or len(grade) != 2:
-        grade = 'T3'
-    good_name = filt.sub('', name).strip()
-    
-    if good_name == 'Tools Simple':
-        good_name = 'Simple Tools'
-    elif good_name == 'Workshop Eggs':
-        good_name = 'Eggs'
-    
-    if good_name not in recipe_data:
-        recipe_data[good_name] = {grade: {}}
-    elif grade not in recipe_data[good_name]:
-        recipe_data[good_name][grade] = {}
-    ingredients = []
-    cur_ingredient = -1
-    for col in columns:
-        val = recipes.loc[i, col] if pd.notna(recipes.loc[i, col]) else ''
-        if col == 'product' or 'ingredient' in col:
-            val = filt.sub(' ', val)
-            if val:
-                val = val.split(' ', maxsplit=1)
-                val[0] = int(val[0])
-            else:
-                continue
-            
-            if 'ingredient' in col:
-                n_ingr = int(col.replace('ingredient', '')[0]) -1
-                if cur_ingredient != n_ingr:
-                    cur_ingredient = n_ingr
-                    ingredients.append([])
-                ingredients[n_ingr].append(val)
-        if 'ingredient' not in col:
-            recipe_data[good_name][grade][col] = val
-    
-    recipe_data[good_name][grade]['ingredients'] = ingredients
+for workshop in workshops:
+    for recipe in workshop['recipes']:
+        good_name = recipe['product']['name'].split(']')[-1].strip()
+        if good_name not in recipe_data:
+            recipe_data[good_name] = {}
+        
+        grade = recipe['grade']
+        grade_id = f'T{grade[-1]}'
+        if grade_id not in recipe_data[good_name]:
+            recipe_data[good_name][grade_id] = {}
+        recipe_data[good_name][grade_id]['product'] = [recipe['product']['amount'], good_name]
+        
+        if 'ingredients' not in recipe_data[good_name][grade_id]:
+            recipe_data[good_name][grade_id]['ingredients'] = []
+        
+        for ingredients in recipe['ingredients']:
+            ings = []
+            for ingredient in ingredients:
+                ings.append([ingredient['amount'], ingredient['name'].split(']')[-1].strip()])
+            recipe_data[good_name][grade_id]['ingredients'].append(ings)
 
 # Ingredient Sets
 good_ingredient_sets = {}

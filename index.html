@@ -31,13 +31,14 @@
             
             // Parse the json string from the goods.json file that we loaded in the html head section
             const GOODS = JSON.parse(goods_data);
-            const NEEDS = ['Porridge', 'Biscuits', 'Pie', 'Pickled Goods', 'Jerky', 'Skewers', 'Coats', 'Leisure', 'Religion', 'Education', 'Luxury', 'Brawling', 'Treatment']
+            const NEEDS = ['Porridge', 'Biscuits', 'Pie', 'Pickled Goods', 'Jerky', 'Skewers', 'Coats', 'Leisure', 'Religion', 'Education', 'Luxury', 'Brawling', 'Treatment', 'Boots', 'Paste']
             const SPECIES = {
                 'Human': ['Porridge', 'Biscuits', 'Pie', 'Coats', 'Leisure', 'Religion'],
                 'Beaver': ['Pickled Goods', 'Biscuits', 'Coats', 'Leisure', 'Education', 'Luxury'],
-                'Harpy': ['Jerky', 'Biscuits', 'Education', 'Pie', 'Coats', 'Treatment'],
-                'Lizard': ['Jerky', 'Pickled Goods', 'Pie', 'Skewers', 'Brawling', 'Religion'],
-                'Fox': ['Porridge', 'Pickled Goods', 'Treatment', 'Skewers', 'Brawling', 'Luxury']
+                'Harpy': ['Jerky', 'Education', 'Coats', 'Treatment', 'Boots', 'Paste'],
+                'Lizard': ['Jerky', 'Pickled Goods', 'Pie', 'Skewers', 'Brawling', 'Boots'],
+                'Fox': ['Porridge', 'Pickled Goods', 'Treatment', 'Skewers', 'Religion', 'Boots'],
+				'Frog': ['Porridge', 'Pie', 'Brawling', 'Religion', 'Luxury', 'Boots', 'Paste']
             }
             const SPECIES_ICONS = {
                 'Human': 'img/species/Human_Portrait.png',
@@ -45,6 +46,7 @@
                 'Harpy': 'img/species/Harpy_Portrait.png',
                 'Lizard': 'img/species/Lizard_Portrait.png',
                 'Fox': 'img/species/Fox_Portrait.png',
+				'Frog': 'img/species/Frog_Portrait.png',
                 'Biscuits': 'img/goods/Icon_Resource_Biscuits.png',
                 'Pie': 'img/goods/Icon_Resource_Pie.png',
                 'Porridge': 'img/goods/Icon_Resource_Porridge.png',
@@ -57,7 +59,9 @@
                 'Education': 'img/needs/Icon_Need_Education.png',
                 'Brawling': 'img/needs/Icon_Need_Brawling.png',
                 'Religion': 'img/needs/Icon_Service_Religion.png',
-                'Coats': 'img/goods/Icon_Resource_Coats.png'
+                'Coats': 'img/goods/Icon_Resource_Coats.png',
+				'Boots': 'img/goods/Icon_Resource_Boots_1.png',
+				'Paste': 'img/needs/Icon_Resource_Paste.png'
             }
 
             // Ingredients
@@ -248,7 +252,7 @@
                 }
 
                 return (
-                    <div className="ats-container icon-grid" style={{maxWidth: '425px'}}>
+                    <div className="ats-container icon-grid" style={{maxWidth: '510px'}}>
                         <div className="grid-header ats-infobox-header-title">
                             {"Species Needs"}
                         </div>
@@ -288,8 +292,8 @@
                 );
             };
 
-            ReactDOM.render(<IngredientGrid rows={8} columns={8} />, document.getElementById('ingredients-root'));
-            ReactDOM.render(<NeedsGrid rows={4} columns={5} />, document.getElementById('needs-root'));
+            ReactDOM.render(<IngredientGrid rows={9} columns={8} />, document.getElementById('ingredients-root'));
+            ReactDOM.render(<NeedsGrid rows={4} columns={6} />, document.getElementById('needs-root'));
         </script>
     </div>
 </body>

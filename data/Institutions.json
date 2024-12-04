@@ -1,0 +1,615 @@
+[
+    {
+        "recipes": [
+            {
+                "id": "Treatment",
+                "gradeId": "Grade1",
+                "servedNeed": "Treatment",
+                "goods": [
+                    {
+                        "name": "[Needs] Tea",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Bath House",
+        "displayName": "Bath House",
+        "description": "A place where villagers can fulfill their need for: Treatment. Passive effects: Regular Baths, Good Health.",
+        "category": "City Buildings",
+        "sizeX": 4,
+        "sizeY": 3,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 10
+            },
+            {
+                "name": "[Mat Processed] Bricks",
+                "amount": 8
+            },
+            {
+                "name": "[Mat Processed] Fabric",
+                "amount": 8
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "recipes": [
+            {
+                "id": "Bloodthirst",
+                "gradeId": "Grade1",
+                "servedNeed": "Brawling",
+                "goods": [
+                    {
+                        "name": "[Needs] Training Gear",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Clan Hall",
+        "displayName": "Clan Hall",
+        "description": "A place where villagers can fulfill their need for: Brawling. Passive effects: Carnivorous Tradition, Ancient Ways.",
+        "category": "City Buildings",
+        "sizeX": 4,
+        "sizeY": 3,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 20
+            },
+            {
+                "name": "[Mat Processed] Bricks",
+                "amount": 8
+            },
+            {
+                "name": "[Mat Processed] Fabric",
+                "amount": 4
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "recipes": [
+            {
+                "id": "Bloodthirst",
+                "gradeId": "Grade1",
+                "servedNeed": "Brawling",
+                "goods": [
+                    {
+                        "name": "[Needs] Training Gear",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "id": "Education",
+                "gradeId": "Grade1",
+                "servedNeed": "Education",
+                "goods": [
+                    {
+                        "name": "[Needs] Scrolls",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Explorers Lodge",
+        "displayName": "Explorers' Lodge",
+        "description": "A place where villagers can fulfill their need for: Brawling,  Education. Passive effects: The Crown Chronicles.",
+        "category": "City Buildings",
+        "sizeX": 3,
+        "sizeY": 3,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 20
+            },
+            {
+                "name": "[Mat Processed] Bricks",
+                "amount": 4
+            },
+            {
+                "name": "[Mat Processed] Fabric",
+                "amount": 8
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "recipes": [
+            {
+                "id": "Bloodthirst",
+                "gradeId": "Grade1",
+                "servedNeed": "Brawling",
+                "goods": [
+                    {
+                        "name": "[Needs] Training Gear",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "id": "Luxury",
+                "gradeId": "Grade1",
+                "servedNeed": "Luxury",
+                "goods": [
+                    {
+                        "name": "[Needs] Wine",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Forum",
+        "displayName": "Forum",
+        "description": "A place where villagers can fulfill their need for: Brawling,  Luxury. Passive effects: Public Performances.",
+        "category": "City Buildings",
+        "sizeX": 4,
+        "sizeY": 4,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Fabric",
+                "amount": 4
+            },
+            {
+                "name": "[Mat Processed] Bricks",
+                "amount": 16
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "recipes": [
+            {
+                "id": "Luxury",
+                "gradeId": "Grade1",
+                "servedNeed": "Luxury",
+                "goods": [
+                    {
+                        "name": "[Needs] Wine",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "id": "Education",
+                "gradeId": "Grade1",
+                "servedNeed": "Education",
+                "goods": [
+                    {
+                        "name": "[Needs] Scrolls",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Guild House",
+        "displayName": "Guild House",
+        "description": "A place where villagers can fulfill their need for: Luxury,  Education. Passive effects: The Guild's Welfare.",
+        "category": "City Buildings",
+        "sizeX": 4,
+        "sizeY": 3,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 40
+            },
+            {
+                "name": "[Mat Processed] Fabric",
+                "amount": 4
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "recipes": [
+            {
+                "id": "Luxury",
+                "gradeId": "Grade1",
+                "servedNeed": "Luxury",
+                "goods": [
+                    {
+                        "name": "[Needs] Wine",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "id": "Education",
+                "gradeId": "Grade1",
+                "servedNeed": "Education",
+                "goods": [
+                    {
+                        "name": "[Needs] Scrolls",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Holy Guild House",
+        "displayName": "Holy Guild House",
+        "description": "A place where villagers can fulfill their need for:  Luxury,  Education. Has an additional effect. Passive effects: Guild House, The Guild's Welfare.",
+        "category": "City Buildings",
+        "sizeX": 4,
+        "sizeY": 3,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 40
+            },
+            {
+                "name": "[Mat Processed] Fabric",
+                "amount": 4
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "recipes": [
+            {
+                "id": "Leasiure",
+                "gradeId": "Grade1",
+                "servedNeed": "Leisure",
+                "goods": [
+                    {
+                        "name": "[Needs] Ale",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "id": "Treatment",
+                "gradeId": "Grade1",
+                "servedNeed": "Treatment",
+                "goods": [
+                    {
+                        "name": "[Needs] Tea",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Holy Market",
+        "displayName": "Holy Market",
+        "description": "A place where villagers can fulfill their need for:  Leisure,  Treatment. Has an additional effect. Passive effects: Ale and Hearty, Market Carts.",
+        "category": "City Buildings",
+        "sizeX": 4,
+        "sizeY": 4,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 20
+            },
+            {
+                "name": "[Mat Processed] Fabric",
+                "amount": 12
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 2
+    },
+    {
+        "recipes": [
+            {
+                "id": "Religion",
+                "gradeId": "Grade1",
+                "servedNeed": "Religion",
+                "goods": [
+                    {
+                        "name": "[Needs] Incense",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "id": "Education",
+                "gradeId": "Grade1",
+                "servedNeed": "Education",
+                "goods": [
+                    {
+                        "name": "[Needs] Scrolls",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Holy Temple",
+        "displayName": "Holy Temple",
+        "description": "A place where villagers can fulfill their need for:  Religion,  Education. Has an additional effect. Passive effects: Sacrament of the Flame, Consecrated Scrolls.",
+        "category": "City Buildings",
+        "sizeX": 3,
+        "sizeY": 3,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 10
+            },
+            {
+                "name": "[Mat Processed] Bricks",
+                "amount": 8
+            },
+            {
+                "name": "[Mat Processed] Fabric",
+                "amount": 8
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "recipes": [
+            {
+                "id": "Leasiure",
+                "gradeId": "Grade1",
+                "servedNeed": "Leisure",
+                "goods": [
+                    {
+                        "name": "[Needs] Ale",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "id": "Treatment",
+                "gradeId": "Grade1",
+                "servedNeed": "Treatment",
+                "goods": [
+                    {
+                        "name": "[Needs] Tea",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Market",
+        "displayName": "Market",
+        "description": "A place where villagers can fulfill their need for: Leisure,  Treatment. Passive effects: Market Carts.",
+        "category": "City Buildings",
+        "sizeX": 4,
+        "sizeY": 4,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 20
+            },
+            {
+                "name": "[Mat Processed] Fabric",
+                "amount": 12
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 2
+    },
+    {
+        "recipes": [
+            {
+                "id": "Religion",
+                "gradeId": "Grade1",
+                "servedNeed": "Religion",
+                "goods": [
+                    {
+                        "name": "[Needs] Incense",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "id": "Leasiure",
+                "gradeId": "Grade1",
+                "servedNeed": "Leisure",
+                "goods": [
+                    {
+                        "name": "[Needs] Ale",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Monastery",
+        "displayName": "Monastery",
+        "description": "A place where villagers can fulfill their need for: Religion,  Leisure. Passive effects: The Green Brew.",
+        "category": "City Buildings",
+        "sizeX": 3,
+        "sizeY": 3,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Bricks",
+                "amount": 20
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "recipes": [
+            {
+                "id": "Leasiure",
+                "gradeId": "Grade1",
+                "servedNeed": "Leisure",
+                "goods": [
+                    {
+                        "name": "[Needs] Ale",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "id": "Luxury",
+                "gradeId": "Grade1",
+                "servedNeed": "Luxury",
+                "goods": [
+                    {
+                        "name": "[Needs] Wine",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Tavern",
+        "displayName": "Tavern",
+        "description": "A place where villagers can fulfill their need for: Leisure,  Luxury. Passive effects: Gleeman's Tales.",
+        "category": "City Buildings",
+        "sizeX": 3,
+        "sizeY": 3,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 20
+            },
+            {
+                "name": "[Mat Processed] Bricks",
+                "amount": 4
+            },
+            {
+                "name": "[Mat Processed] Fabric",
+                "amount": 8
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "recipes": [
+            {
+                "id": "Treatment",
+                "gradeId": "Grade1",
+                "servedNeed": "Treatment",
+                "goods": [
+                    {
+                        "name": "[Needs] Tea",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "id": "Religion",
+                "gradeId": "Grade1",
+                "servedNeed": "Religion",
+                "goods": [
+                    {
+                        "name": "[Needs] Incense",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Tea Doctor",
+        "displayName": "Tea Doctor",
+        "description": "A place where villagers can fulfill their need for: Treatment,  Religion. Passive effects: Vitality.",
+        "category": "City Buildings",
+        "sizeX": 4,
+        "sizeY": 3,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 10
+            },
+            {
+                "name": "[Mat Processed] Bricks",
+                "amount": 8
+            },
+            {
+                "name": "[Mat Processed] Fabric",
+                "amount": 8
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "recipes": [
+            {
+                "id": "Religion",
+                "gradeId": "Grade1",
+                "servedNeed": "Religion",
+                "goods": [
+                    {
+                        "name": "[Needs] Incense",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "id": "Education",
+                "gradeId": "Grade1",
+                "servedNeed": "Education",
+                "goods": [
+                    {
+                        "name": "[Needs] Scrolls",
+                        "amount": 1
+                    }
+                ]
+            }
+        ],
+        "id": "Temple",
+        "displayName": "Temple",
+        "description": "A place where villagers can fulfill their need for: Religion,  Education. Passive effects: Sacrament of the Flame.",
+        "category": "City Buildings",
+        "sizeX": 3,
+        "sizeY": 3,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 10
+            },
+            {
+                "name": "[Mat Processed] Bricks",
+                "amount": 8
+            },
+            {
+                "name": "[Mat Processed] Fabric",
+                "amount": 8
+            }
+        ],
+        "constructionTime": 61,
+        "cityScore": 8,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 3
+    }
+]

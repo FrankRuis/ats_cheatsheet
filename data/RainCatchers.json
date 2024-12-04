@@ -1,0 +1,104 @@
+[
+    {
+        "baseTankCapacity": 100,
+        "amountProduced": 4,
+        "productionTime": 0,
+        "recipes": [
+            {
+                "product": {
+                    "name": "[Water] Drizzle Water",
+                    "amount": 4
+                },
+                "productionTime": 20
+            },
+            {
+                "product": {
+                    "name": "[Water] Clearance Water",
+                    "amount": 4
+                },
+                "productionTime": 20
+            },
+            {
+                "product": {
+                    "name": "[Water] Storm Water",
+                    "amount": 4
+                },
+                "productionTime": 20
+            }
+        ],
+        "id": "Advanced Rain Catcher",
+        "displayName": "Advanced Rain Collector",
+        "description": "Can collect rainwater used for crafting and powering Rain Engines in production buildings. The type of collected rainwater depends on the season. Has a tank capacity of 100.",
+        "category": "Resource Gathering",
+        "sizeX": 3,
+        "sizeY": 2,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Pipe",
+                "amount": 5
+            },
+            {
+                "name": "[Mat Processed] Parts",
+                "amount": 3
+            },
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 5
+            }
+        ],
+        "constructionTime": 20,
+        "cityScore": 0,
+        "movable": false,
+        "initiallyEssential": false,
+        "workplaces": 3
+    },
+    {
+        "baseTankCapacity": 50,
+        "amountProduced": 2,
+        "productionTime": 0,
+        "recipes": [
+            {
+                "product": {
+                    "name": "[Water] Drizzle Water",
+                    "amount": 2
+                },
+                "productionTime": 20
+            },
+            {
+                "product": {
+                    "name": "[Water] Clearance Water",
+                    "amount": 2
+                },
+                "productionTime": 20
+            },
+            {
+                "product": {
+                    "name": "[Water] Storm Water",
+                    "amount": 2
+                },
+                "productionTime": 20
+            }
+        ],
+        "id": "Rain Catcher",
+        "displayName": "Rain Collector",
+        "description": "Can collect rainwater used for crafting and powering Rain Engines in production buildings. The type of collected rainwater depends on the season. Has a tank capacity of 50.",
+        "category": "Resource Gathering",
+        "sizeX": 2,
+        "sizeY": 2,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 2
+            },
+            {
+                "name": "[Mat Processed] Parts",
+                "amount": 3
+            }
+        ],
+        "constructionTime": 20,
+        "cityScore": 0,
+        "movable": false,
+        "initiallyEssential": true,
+        "workplaces": 2
+    }
+]

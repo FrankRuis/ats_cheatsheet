@@ -1,0 +1,133 @@
+[
+    {
+        "baseTankCapacity": 50,
+        "amountProduced": 2,
+        "productionTime": 15,
+        "levels": [
+            {
+                "requiredGoods": [],
+                "options": []
+            },
+            {
+                "requiredGoods": [
+                    {
+                        "goods": [
+                            {
+                                "name": "[Mat Processed] Pipe",
+                                "amount": 2
+                            }
+                        ]
+                    },
+                    {
+                        "goods": [
+                            {
+                                "name": "Hearth Parts",
+                                "amount": 1
+                            }
+                        ]
+                    }
+                ],
+                "options": [
+                    "[U] Pump Automaton"
+                ]
+            },
+            {
+                "requiredGoods": [
+                    {
+                        "goods": [
+                            {
+                                "name": "[Mat Processed] Planks",
+                                "amount": 10
+                            },
+                            {
+                                "name": "[Mat Processed] Bricks",
+                                "amount": 10
+                            }
+                        ]
+                    },
+                    {
+                        "goods": [
+                            {
+                                "name": "[Mat Processed] Pipe",
+                                "amount": 2
+                            }
+                        ]
+                    }
+                ],
+                "options": [
+                    "[U] Extractor Tank"
+                ]
+            },
+            {
+                "requiredGoods": [
+                    {
+                        "goods": [
+                            {
+                                "name": "[Mat Processed] Pipe",
+                                "amount": 2
+                            }
+                        ]
+                    },
+                    {
+                        "goods": [
+                            {
+                                "name": "Hearth Parts",
+                                "amount": 1
+                            }
+                        ]
+                    }
+                ],
+                "options": [
+                    "[U] Pump Automaton"
+                ]
+            }
+        ],
+        "id": "Water Extractor",
+        "displayName": "Geyser Pump",
+        "description": "Used to extract and pump infused rainwater through underground pipes to production buildings, where it can be used to increase productivity. Must be placed on an active geyser. Has a tank capacity of 50.",
+        "category": "Resource Gathering",
+        "sizeX": 2,
+        "sizeY": 2,
+        "requiredGoods": [
+            {
+                "name": "[Mat Processed] Planks",
+                "amount": 6
+            },
+            {
+                "name": "[Mat Processed] Pipe",
+                "amount": 4
+            }
+        ],
+        "constructionTime": 5,
+        "cityScore": 2,
+        "movable": false,
+        "initiallyEssential": true,
+        "workplaces": 2,
+        "recipes": [
+            {
+                "product": {
+                    "name": "[Water] Drizzle Water",
+                    "amount": 2
+                },
+                "grade": "Grade3",
+                "productionTime": 15
+            },
+            {
+                "product": {
+                    "name": "[Water] Clearance Water",
+                    "amount": 2
+                },
+                "grade": "Grade3",
+                "productionTime": 15
+            },
+            {
+                "product": {
+                    "name": "[Water] Storm Water",
+                    "amount": 2
+                },
+                "grade": "Grade3",
+                "productionTime": 15
+            }
+        ]
+    }
+]

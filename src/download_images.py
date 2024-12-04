@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 from tqdm import tqdm
 
-do_for = 'Perks'  # Perks or Goods
+do_for = 'Goods'  # Perks or Goods
 df = pd.read_csv(f'../data/{do_for}.csv')
 
 base = 'https://hoodedhorse.com/wiki/Against_the_Storm/Special:FilePath/'
