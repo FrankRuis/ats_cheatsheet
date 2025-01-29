@@ -23,6 +23,7 @@
     --ats-bright-blue-highlight: #b4e5fd;
     --ats-bright-blue-brighest: #e1f5fe;
     --ats-bright-blue-dim: #79d0fc;
+	--ats-color-blue-unfilled-resolve: #0b1520;
     --ats-bright-red: #ff3c00;
     --ats-bright-green: #87cb64;
     --ats-bright-green-highlight: #bae1a7;
@@ -31,6 +32,8 @@
     --ats-perk-blue: #015db9;
     --ats-perk-purple: #7f27b9;
     --ats-perk-orange: #da6d00;
+    --ats-color-green-leather-shadow: #17170D;
+    --ats-color-green-leather-shadow-lighter: #1C1C10;
 }
 
 body {
@@ -52,6 +55,43 @@ body {
     body {
         margin: 50px;
     }
+}
+
+hr {
+	border: 1px solid #4f3c21;
+}
+
+.tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tabs button {
+	color: var(--ats-yellow, gold);
+	font-variant: small-caps;
+    font-family: var(--ats-heading),serif;
+    font-size: 14pt;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    line-height: 1.4em;
+	background-color: #081007;
+	border: 2.5px ridge #93775d;
+}
+
+.tab {
+    padding: 10px 15px;
+    border: none;
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.tab.active {
+    background-color: #11220f;
+}
+
+.tab-content {
+	min-width: 100%;
 }
 
 div.content {
@@ -103,11 +143,110 @@ img {
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
-    align-items: center;
 }
 
 .container-block-item {
     margin: 10px;
+}
+
+/* Image Block */
+.image-upload-label {
+    display: inline-block;
+    padding: 5px 5px;
+    background-color: #081007;
+    cursor: pointer;
+    border-radius: 5px; /* Add rounded corners */
+    text-align: center; /* Center the text */
+	color: var(--ats-yellow, gold);
+    font-variant: small-caps;
+    font-family: var(--ats-heading), serif;
+    font-size: 12pt;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    line-height: 1.4em;
+	margin-bottom: 5px;
+}
+
+.image-block {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    flex-direction: column;  /* Arrange items in a column */
+    min-height: 200px; /* Ensure some minimum height */
+}
+
+/* Data Table */
+#SearchInput {
+	border: 0;
+	border-radius: 5px;
+    margin: 5px;
+    height: 1.7em;
+    padding: 0.4em 4.5em 0.2em 2em;
+    background: var(--ats-dark);
+	color:  var(--ats-default, #e0e0d0);
+}
+
+button.cat-active {
+    font-variant: small-caps;
+    font-size: 12pt;
+	cursor: pointer;
+	
+	background-color: var(--ats-bright-gold);
+	padding: 2px;
+	border: 0;
+	margin: 2px;
+}
+
+button.cat-inactive {
+    font-variant: small-caps;
+    font-size: 12pt;
+	cursor: pointer;
+	
+	background-color: var(--ats-gold);
+	padding: 2px;
+	border: 0;
+	margin: 2px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    padding: 10px;
+	margin: 10px 0px;
+}
+
+.data-table th, .data-table td {
+    border: 2px solid var(--ats-dark, black);
+    padding: 8px;
+    text-align: left;
+}
+
+.data-table td > * > img, .data-table td > img {
+	border: 0px solid transparent;
+	border-image-source: url(../img/FRAME_Tex_Square_Big_1.png);
+	border-image-width: auto;
+	border-image-slice: 7 fill;
+	border-image-outset: 2px;
+	border-width: 4px;
+	cursor: pointer;
+}
+
+table.data-table > * > tr {
+	background-color: var(--ats-color-green-leather-shadow);
+}
+
+table.data-table > * > tr:nth-child(odd) {
+	background-color: var(--ats-color-green-leather-shadow-lighter);
+}
+
+.data-table th {
+	background-color: var(--ats-color-blue-unfilled-resolve);
+	border: 2px solid var(--ats-dark, black);
+    cursor: pointer; /* Make header clickable for sorting */
+}
+
+table.data-table > * > tr:hover {
+    background-color: var(--ats-gold); /* Highlight row on hover */
 }
 
 /* Icons */
@@ -456,6 +595,7 @@ input:checked + .slider:before {
     color: var(--ats-default, #e0e0d0);
     font-variant: small-caps;
     font-size: 14pt;
+	font-family: var(--ats-heading),serif;
 }
 
 /* Font awesome icons */

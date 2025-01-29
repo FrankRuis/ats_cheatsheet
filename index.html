@@ -11,27 +11,35 @@
     <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/react-beautiful-dnd@13.1.1/dist/react-beautiful-dnd.min.js"></script>
     <script type="text/javascript" src="js/goods.json"></script>
+	<script type="text/javascript" src="js/buildings.json"></script>
 </head>
 <body>
     <div class="content">
         <h1 id="firstHeading" class="firstHeading mw-first-heading"><span class="mw-page-title-main">Against the Storm Cheatsheet</span> <a href="https://github.com/FrankRuis/ats_cheatsheet" target="_blank"><i class="fa-brands fa-github"></i></a></h1>
 
-        <div class="container-block">
-            <!-- Ingredient grid -->
-            <div class="container-block-item" id="ingredients-root"></div>
+        <div class="container-block" id="block_1">
 
-            <!-- Species needs -->
-            <div class="container-block-item" id="needs-root"></div>
         </div>
+		
+		<hr>
+		
+        <div class="container-block" id="block_2">
+
+        </div>
+		
 
         <!-- React code -->
         <script type="text/babel">
             const { useState, useEffect } = React;
+			const { DragDropContext, Droppable, Draggable } = ReactBeautifulDnd;
             
             // Parse the json string from the goods.json file that we loaded in the html head section
             const GOODS = JSON.parse(goods_data);
+			const BUILDINGS = JSON.parse(buildings_data);
             const NEEDS = ['Porridge', 'Biscuits', 'Pie', 'Pickled Goods', 'Jerky', 'Skewers', 'Coats', 'Leisure', 'Religion', 'Education', 'Luxury', 'Brawling', 'Treatment', 'Boots', 'Paste']
+			const NEEDTRANS = {'Treatment': 'Tea', 'Leisure': 'Ale', 'Luxury': 'Wine', 'Brawling': 'Training Gear', 'Religion': 'Incense', 'Education': 'Scrolls'}
             const SPECIES = {
                 'Human': ['Porridge', 'Biscuits', 'Pie', 'Coats', 'Leisure', 'Religion'],
                 'Beaver': ['Pickled Goods', 'Biscuits', 'Coats', 'Leisure', 'Education', 'Luxury'],
@@ -83,12 +91,17 @@
                         setHighlightedSet(newHighlightedSet);
                         setActiveElement(iconName);
                     }
+					document.getElementById("AllButton").click();
                 };
 
                 const isIconHighlighted = (iconName) => {
                     if (!highlightedSet || !activeElement) return true;
                     return highlightedSet.flat().includes(iconName) || activeElement === iconName;
                 };
+				
+				const isIconMainHighlighted = (iconName) => {
+					return activeElement === iconName;
+				};
 
                 const getColor = (iconName) => {
                     // Assumes no ingredient occurs in multiple sets, and at most 3 sets (which is true at the time of writing this)
@@ -130,7 +143,7 @@
                                 row.map((iconName) => (
                                     <div
                                     key={iconName}
-                                    className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
+                                    className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? (isIconMainHighlighted(iconName) ? ' icon-active' : '') : ' icon-inactive'}`}
                                     onClick={() => handleIconClick(iconName)}
                                     style={{ borderTop: (isIconHighlighted(iconName) && activeElement && activeElement != iconName) ? '5px solid ' + getColor(iconName) : '5px solid rgba(0, 0, 0, 0)' }}
                                     id={iconName}
@@ -178,8 +191,7 @@
 
                 const handleIconClick = (iconName) => {
                     if (!(iconName in SPECIES)) {
-                        var trans = {'Treatment': 'Tea', 'Leisure': 'Ale', 'Luxury': 'Wine', 'Brawling': 'Training Gear', 'Religion': 'Incense', 'Education': 'Scrolls'}
-                        if (iconName in trans) iconName = trans[iconName];
+                        if (iconName in NEEDTRANS) iconName = NEEDTRANS[iconName];
                         document.getElementById(iconName).click()
                         return;
                     }
@@ -291,9 +303,325 @@
                     </div>
                 );
             };
+			
+			// Buildings data table
+			const DataTable = () => {
+				const formattedBuildings = [];
+				const per_cat = {};
+				for (const building in BUILDINGS) {
+					if (BUILDINGS[building]["category"] in per_cat) {
+						per_cat[BUILDINGS[building]["category"]].push(building);
+					} else {
+						per_cat[BUILDINGS[building]["category"]] = [building];
+					}
+					// building products
+					var products = [];
+					for (const rec in BUILDINGS[building]["recipes"]) {
+						var n = BUILDINGS[building]["recipes"][rec]["product"]["name"];
+						if (n in NEEDTRANS) n = NEEDTRANS[n];
+						BUILDINGS[building]["recipes"][rec]["product"]["icon_path"] = GOODS[n]["icon_path"];
+						BUILDINGS[building]["recipes"][rec]["product"]["grade"] = BUILDINGS[building]["recipes"][rec]["grade"];
+						products.push(BUILDINGS[building]["recipes"][rec]["product"]);
+					}
+				
+					// building costs
+					var cost = [];
+					for (const req in BUILDINGS[building]["requiredGoods"]) {
+						var n = BUILDINGS[building]["requiredGoods"][req]["name"];
+						var reqGood = GOODS[n];
+						cost.push({"amount": BUILDINGS[building]["requiredGoods"][req]["amount"], "icon_path": reqGood["icon_path"], "name": reqGood["displayName"]});
+					}
+					
+					// format building info
+					const formattedBuilding = {
+						building: BUILDINGS[building].displayName,
+						icon: BUILDINGS[building].icon,
+						products: products,
+						cost: cost,
+						id: building,
+						category: BUILDINGS[building].category,
+					};
 
-            ReactDOM.render(<IngredientGrid rows={9} columns={8} />, document.getElementById('ingredients-root'));
-            ReactDOM.render(<NeedsGrid rows={4} columns={6} />, document.getElementById('needs-root'));
+					formattedBuildings.push(formattedBuilding);
+				}
+			
+				const [data, setData] = useState(formattedBuildings);
+				const [searchTerm, setSearchTerm] = useState('');
+				const [sortKey, setSortKey] = useState(null);
+				const [sortDirection, setSortDirection] = useState('asc');
+				const [activeCats, setActiveCats] = useState(Object.keys(per_cat));
+				const [activeFilts, setActiveFilts] = useState(["Products"]);
+
+				const handleSearch = (event) => {
+					setSearchTerm(event.target.value);
+				};
+
+				const handleSort = (key) => {
+					if (sortKey === key) {
+						if (sortDirection === 'asc') {
+							setSortDirection('desc');
+						} else if (sortDirection === 'desc') {
+							setSortDirection(null); // Reset to default (no sorting)
+						} else {
+							setSortDirection('asc');
+						}
+					} else {
+						setSortKey(key);
+						setSortDirection('asc');
+					}
+				};
+				
+                const handleIconClick = (iconName) => {
+                    document.getElementById(iconName).click();
+                };
+
+				const sortedData = [...data].sort((a, b) => {
+					if (!sortKey || sortDirection === null) return 0; // Check for null sortDirection
+
+					const aValue = a[sortKey];
+					const bValue = b[sortKey];
+
+					if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+					if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+					return 0;
+				});
+				
+				const handleFilter = (filterCat) => {
+					if (filterCat === "Costs" || filterCat === "Products") {
+						setActiveFilts(prevActiveFilts => {
+							const newActiveFilts = [...prevActiveFilts]; // Create a copy
+							if (prevActiveFilts.length == Object.keys(per_cat).length) {
+								return [filterCat];
+							}
+							
+							const idx = newActiveFilts.indexOf(filterCat);
+							if (idx === -1) {
+								newActiveFilts.push(filterCat);
+							} else {
+								newActiveFilts.splice(idx, 1);
+							}
+							return newActiveFilts;
+						});
+						return;
+					}
+				
+					if (filterCat === "all") {
+						setActiveCats(Object.keys(per_cat));
+					} else {
+						setActiveCats(prevActiveCats => {
+							const newActiveCats = [...prevActiveCats]; // Create a copy
+							if (prevActiveCats.length == Object.keys(per_cat).length) {
+								return [filterCat];
+							}
+							
+							const idx = newActiveCats.indexOf(filterCat);
+							if (idx === -1) {
+								newActiveCats.push(filterCat);
+							} else {
+								newActiveCats.splice(idx, 1);
+							}
+							return newActiveCats;
+						});
+					}
+				};
+				
+				const activeIngredient = document.getElementsByClassName("icon-active");
+				
+				const filteredData = sortedData.filter(item => {
+					if (activeCats.indexOf(item.category) == -1) {
+						return false;
+					}
+					
+					var cost = JSON.stringify(item.cost);
+					var products = JSON.stringify(item.products);
+					if (activeFilts.indexOf("Costs") == -1) {
+						cost = "";
+					}
+					if (activeFilts.indexOf("Products") == -1) {
+						products = "";
+					}
+					const searchString = `${item.building} ${products} ${cost}`.toLowerCase(); // Customize search
+					if (activeIngredient.length > 0) {
+						return searchString.includes('name":"'+activeIngredient[0].id.toLowerCase());
+					}
+					
+					return searchString.includes(searchTerm.toLowerCase());
+				});
+
+
+				return (
+					<div className="ats-container icon-grid" style={{ minWidth: '850px' }}>
+						<div className="grid-header ats-infobox-header-title">
+							{"Buildings"}
+						</div>
+						<div className="icon-grid-wrapper">
+							{(activeIngredient.length == 0) ? 
+							<div><input type="text" placeholder="Search" id="SearchInput" value={searchTerm} onChange={handleSearch} /></div>
+							:
+								<div>
+								<button onClick={() => handleFilter("Products")} className={(activeFilts.indexOf("Products") == -1) ? "cat-inactive" : "cat-active"}>Products</button>
+								<button onClick={() => handleFilter("Costs")} className={(activeFilts.indexOf("Costs") == -1) ? "cat-inactive" : "cat-active"}>Costs</button>
+								<hr/>
+								</div>
+							}
+							<div>
+							<button onClick={() => handleFilter("all")} id="AllButton" className={(activeCats.length == Object.keys(per_cat).length) ? "cat-active" : "cat-inactive"}>all</button>
+							{Object.keys(per_cat).map((catItem, catIndex) => ( 
+								<button onClick={() => handleFilter(catItem)} className={(activeCats.indexOf(catItem) == -1) ? "cat-inactive" : "cat-active"}>{catItem}</button>
+							))}
+							</div>
+							<table className="data-table">
+								<thead>
+									<tr>
+										<th onClick={() => handleSort('building')}>
+											Building
+											{sortKey === 'building' && (sortDirection === 'asc' ? ' ▲' : sortDirection === 'desc' ? ' ▼' : '')}
+										</th>
+										<th onClick={() => handleSort('products')}>
+											Products
+											{sortKey === 'products' && (sortDirection === 'asc' ? ' ▲' : sortDirection === 'desc' ? ' ▼' : '')}
+										</th>
+										<th onClick={() => handleSort('cost')}>
+											Cost
+											{sortKey === 'cost' && (sortDirection === 'asc' ? ' ▲' : sortDirection === 'desc' ? ' ▼' : '')}
+										</th>
+										{/* Add more columns as needed */}
+									</tr>
+								</thead>
+								<tbody>
+									{filteredData.map((item, index) => (
+										<tr key={item.id}>
+											<td>
+												<img src={item.icon} alt={item.building} style={{ maxWidth: '60px', maxHeight: '60px', margin: '10px' }} />
+												{item.building}
+											</td>
+											<td>
+												{item.products.map((productItem, productIndex) => (
+												  <div><img key={productIndex} onClick={() => handleIconClick(productItem.name)} alt={productItem.name} src={productItem.icon_path} width="30" height="30"/> {productItem.name} {productItem.grade ? "(" + productItem.grade + ")" : ""}</div>
+												))}
+											</td>
+											<td>
+												{item.cost.map((costItem, costIndex) => (
+												  <div>{costItem.amount} <img key={costIndex} alt={costItem.name} onClick={() => handleIconClick(costItem.name)} src={costItem.icon_path} width="30" height="30"/> {costItem.name}</div>
+												))}
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				);
+			};
+
+			// Drag and drop
+			const DraggableContainer = () => {
+				const [items, setItems] = useState([
+					{ id: "ingredients", content: <IngredientGrid rows={9} columns={8} /> },
+					{ id: "needs", content: <NeedsGrid rows={4} columns={6} /> },
+				]);
+
+				const [direction, setDirection] = useState("horizontal");
+
+				// Detect screen width and adjust direction dynamically
+				useEffect(() => {
+					const updateDirection = () => {
+						setDirection(window.innerWidth < 1380 ? "vertical" : "horizontal");
+					};
+
+					updateDirection(); // Set initial value
+					window.addEventListener("resize", updateDirection);
+					return () => window.removeEventListener("resize", updateDirection);
+				}, []);
+
+				const onDragEnd = (result) => {
+					if (!result.destination) return; // If dropped outside the list, do nothing
+
+					const newItems = Array.from(items);
+					const [movedItem] = newItems.splice(result.source.index, 1);
+					newItems.splice(result.destination.index, 0, movedItem);
+
+					setItems(newItems);
+				};
+
+				return (
+					<DragDropContext onDragEnd={onDragEnd}>
+						<Droppable droppableId="droppable-container" direction={direction}>
+							{(provided) => (
+								<div 
+									className="container-block" 
+									{...provided.droppableProps} 
+									ref={provided.innerRef} 
+									style={{ 
+										display: "flex", 
+										flexDirection: direction === "horizontal" ? "row" : "column", 
+									}}
+								>
+									{items.map((item, index) => (
+										<Draggable key={item.id} draggableId={item.id} index={index}>
+											{(provided) => (
+												<div
+													ref={provided.innerRef}
+													{...provided.draggableProps}
+													{...provided.dragHandleProps}
+													className="container-block-item"
+													style={{ 
+														...provided.draggableProps.style, 
+														cursor: "grab", 
+													}}
+												>
+													{item.content}
+												</div>
+											)}
+										</Draggable>
+									))}
+									{provided.placeholder}
+								</div>
+							)}
+						</Droppable>
+					</DragDropContext>
+				);
+			};
+			
+			const ImageUploader = () => {
+				const [image, setImage] = useState(localStorage.getItem('uploadedImage') || null); // Load from localStorage
+
+				const handleImageUpload = (event) => {
+					const file = event.target.files[0];
+
+					if (file) {
+						const reader = new FileReader();
+
+						reader.onloadend = () => {
+							const base64String = reader.result;
+							setImage(base64String);
+							localStorage.setItem('uploadedImage', base64String); // Store in localStorage
+						};
+
+						reader.readAsDataURL(file);
+					}
+				};
+
+				const handleClearImage = () => {
+					setImage(null);
+					localStorage.removeItem('uploadedImage');
+				}
+
+				return (
+					<div>
+						<input type="file" accept="image/*" onChange={handleImageUpload} />
+						{image && (
+							<div>
+								<img src={image} alt="Uploaded Image" style={{ maxWidth: '200px', maxHeight: '200px' }} /> {/* Display image */}
+								<button onClick={handleClearImage}>Clear Image</button>
+							</div>
+						)}
+					</div>
+				);
+			};
+			
+			ReactDOM.render(<DraggableContainer />, document.querySelector("#block_1"));
+			ReactDOM.render(<DataTable />, document.querySelector("#block_2"));
         </script>
     </div>
 </body>
