@@ -478,7 +478,7 @@
 							<div>
 							<button onClick={() => handleFilter("all")} id="AllButton" className={(activeCats.length == Object.keys(per_cat).length) ? "cat-active" : "cat-inactive"}>all</button>
 							{Object.keys(per_cat).map((catItem, catIndex) => ( 
-								<button onClick={() => handleFilter(catItem)} className={(activeCats.indexOf(catItem) == -1) ? "cat-inactive" : "cat-active"}>{catItem}</button>
+								<button key={catItem} onClick={() => handleFilter(catItem)} className={(activeCats.indexOf(catItem) == -1) ? "cat-inactive" : "cat-active"}>{catItem}</button>
 							))}
 							</div>
 							<table className="data-table">
@@ -508,12 +508,12 @@
 											</td>
 											<td>
 												{item.products.map((productItem, productIndex) => (
-												  <div><img key={productIndex} onClick={() => handleIconClick(productItem.name)} alt={productItem.name} src={productItem.icon_path} width="30" height="30"/> {productItem.name} {productItem.grade ? "(" + productItem.grade + ")" : ""}</div>
+												  <div key={productIndex}><img onClick={() => handleIconClick(productItem.name)} alt={productItem.name} src={productItem.icon_path} width="30" height="30"/> {productItem.name} {productItem.grade ? "(" + productItem.grade + ")" : ""}</div>
 												))}
 											</td>
 											<td>
 												{item.cost.map((costItem, costIndex) => (
-												  <div>{costItem.amount} <img key={costIndex} alt={costItem.name} onClick={() => handleIconClick(costItem.name)} src={costItem.icon_path} width="30" height="30"/> {costItem.name}</div>
+												  <div key={costIndex}>{costItem.amount} <img alt={costItem.name} onClick={() => handleIconClick(costItem.name)} src={costItem.icon_path} width="30" height="30"/> {costItem.name}</div>
 												))}
 											</td>
 										</tr>
