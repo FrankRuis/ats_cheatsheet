@@ -48,6 +48,16 @@
                 'Fox': ['Porridge', 'Pickled Goods', 'Treatment', 'Skewers', 'Religion', 'Boots'],
 				'Frog': ['Porridge', 'Pie', 'Brawling', 'Religion', 'Luxury', 'Boots', 'Paste']
             }
+			const overlappingNeeds = {};
+			for (const species in SPECIES) {
+			  const speciesNeeds = SPECIES[species];
+			  for (const need of speciesNeeds) {
+				if (!(need in overlappingNeeds)) {
+				  overlappingNeeds[need] = [];
+				}
+				overlappingNeeds[need].push(species);
+			  }
+			}
             const SPECIES_ICONS = {
                 'Human': 'img/species/Human_Portrait.png',
                 'Beaver': 'img/species/Beaver_Portrait.png',
@@ -275,6 +285,7 @@
                                     <div
                                     key={iconName}
                                     className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
+									id={iconName}
                                     onClick={() => handleIconClick(iconName)}
                                     style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: (isIconHighlighted(iconName) && activeSpecies) ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
                                     >
@@ -620,8 +631,81 @@
 				);
 			};
 			
+            // Overlapping Needs
+            const OverlappingNeeds = () => {
+                const handleIconClick = (iconName) => {
+					if (iconName in NEEDTRANS) iconName = NEEDTRANS[iconName];
+					document.getElementById(iconName).click();
+                };
+
+                // Generate grid layout from the SPECIES keys
+                const needsNames = Object.keys(overlappingNeeds);
+                const grid = [];
+
+                for (let i = 0; i < needsNames.length; i++) {
+                    const row = [needsNames[i]];
+					for (let j = 0; j < overlappingNeeds[needsNames[i]].length; j++) {
+						row.push(overlappingNeeds[needsNames[i]][j]);
+					}
+					grid.push(row);
+                }
+				return (
+				  <div className="ats-container icon-grid" style={{ maxWidth: '510px' }}>
+					<div className="grid-header ats-infobox-header-title">
+					  {"Species Needs Overlap"}
+					</div>
+					<div className="icon-grid-wrapper">
+					  {grid.map((row, rowIndex) => (
+						<div className='icon-row' key={rowIndex}>
+						  {row.map((iconName, iconIndex) => (
+							<div
+							  key={iconName}
+							  className={`ats-single-ingredient-icon icon`}
+							  style={(iconIndex == 0) ? {borderRight: "solid 4px #4f3c21", paddingRight: "15px", marginBottom: "0", marginTop: "0"} : {}}
+							  onClick={() => handleIconClick(iconName)}
+							>
+							  <img src={SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
+							</div>
+						  ))}
+						</div>
+					  ))}
+					</div>
+				  </div>
+				);
+            };
+			
 			ReactDOM.render(<DraggableContainer />, document.querySelector("#block_1"));
-			ReactDOM.render(<DataTable />, document.querySelector("#block_2"));
+			
+			const TABS = [
+				{ id: 'buildings-table', label: 'Buildings', content: <DataTable /> },
+				{ id: 'overlapping-needs', label: 'Needs Info', content: <OverlappingNeeds /> },
+			];
+
+			const TabsComponent = () => {
+				const [activeTab, setActiveTab] = useState(TABS[0].id);
+
+				return (
+					<div>
+						<div className="tabs">
+							{TABS.map(tab => (
+								<button
+									key={tab.id}
+									className={`tab ${activeTab === tab.id ? 'active' : ''}`}
+									onClick={() => setActiveTab(tab.id)}
+								>
+									{tab.label}
+								</button>
+							))}
+						</div>
+						<div className="tab-content">
+							{TABS.find(tab => tab.id === activeTab).content}
+						</div>
+					</div>
+				);
+			};
+
+			// Replace ReactDOM.render with this:
+			ReactDOM.render(<TabsComponent />, document.querySelector("#block_2"));
         </script>
     </div>
 </body>
