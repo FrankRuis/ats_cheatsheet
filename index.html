@@ -634,37 +634,56 @@
             // Overlapping Needs
             const OverlappingNeeds = () => {
                 const handleIconClick = (iconName) => {
+					if (iconName == "None") return;
 					if (iconName in NEEDTRANS) iconName = NEEDTRANS[iconName];
 					document.getElementById(iconName).click();
                 };
 
                 // Generate grid layout from the SPECIES keys
                 const needsNames = Object.keys(overlappingNeeds);
-                const grid = [];
 
+				const speciesNames = Object.keys(SPECIES);
+				const headerRow = ["None", ...speciesNames];
+				const grid = [];
                 for (let i = 0; i < needsNames.length; i++) {
                     const row = [needsNames[i]];
-					for (let j = 0; j < overlappingNeeds[needsNames[i]].length; j++) {
-						row.push(overlappingNeeds[needsNames[i]][j]);
+					for (let j = 0; j < speciesNames.length; j++) {
+						if (overlappingNeeds[needsNames[i]].indexOf(speciesNames[j]) >= 0) {
+							row.push(speciesNames[j]);
+						} else {
+							row.push("None");
+						}
 					}
 					grid.push(row);
                 }
 				return (
-				  <div className="ats-container icon-grid" style={{ maxWidth: '510px' }}>
+				  <div className="ats-container icon-grid" style={{ maxWidth: '750px' }}>
 					<div className="grid-header ats-infobox-header-title">
 					  {"Species Needs Overlap"}
 					</div>
 					<div className="icon-grid-wrapper">
+						<div className={`icon-row header-row`} style={{marginBottom: "0"}}>
+						{headerRow.map((iconName, iconIndex) => (
+							<div
+							key={iconName}
+							className={`ats-single-ingredient-icon icon`}
+							onClick={() => handleIconClick(iconName)}
+							>
+								<img style={iconName == "None" ? {visibility: "hidden"} : {}} src={iconName == "None" ? "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" : SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
+							</div>
+						))}
+						</div>
+
 					  {grid.map((row, rowIndex) => (
 						<div className='icon-row' key={rowIndex}>
 						  {row.map((iconName, iconIndex) => (
 							<div
-							  key={iconName}
+							  key={iconIndex}
 							  className={`ats-single-ingredient-icon icon`}
 							  style={(iconIndex == 0) ? {borderRight: "solid 4px #4f3c21", paddingRight: "15px", marginBottom: "0", marginTop: "0"} : {}}
 							  onClick={() => handleIconClick(iconName)}
 							>
-							  <img src={SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
+							  <img style={iconName == "None" ? {visibility: "hidden"} : {}} src={iconName == "None" ? "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" : SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
 							</div>
 						  ))}
 						</div>
