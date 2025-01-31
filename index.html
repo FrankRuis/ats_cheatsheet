@@ -669,7 +669,7 @@
 							className={`ats-single-ingredient-icon icon`}
 							onClick={() => handleIconClick(iconName)}
 							>
-								<img style={iconName == "None" ? {visibility: "hidden"} : {}} src={iconName == "None" ? "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" : SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
+								<img style={iconName == "None" ? {visibility: "hidden"} : {}} src={iconName == "None" ? "data:," : SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
 							</div>
 						))}
 						</div>
@@ -683,7 +683,7 @@
 							  style={(iconIndex == 0) ? {borderRight: "solid 4px #4f3c21", paddingRight: "15px", marginBottom: "0", marginTop: "0"} : {}}
 							  onClick={() => handleIconClick(iconName)}
 							>
-							  <img style={iconName == "None" ? {visibility: "hidden"} : {}} src={iconName == "None" ? "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" : SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
+							  <img style={iconName == "None" ? {visibility: "hidden"} : {}} src={iconName == "None" ? "data:," : SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
 							</div>
 						  ))}
 						</div>
