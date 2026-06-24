@@ -46,7 +46,8 @@
                 'Harpy': ['Jerky', 'Education', 'Coats', 'Treatment', 'Boots', 'Paste'],
                 'Lizard': ['Jerky', 'Pickled Goods', 'Pie', 'Skewers', 'Brawling', 'Boots'],
                 'Fox': ['Porridge', 'Pickled Goods', 'Treatment', 'Skewers', 'Religion', 'Boots'],
-				'Frog': ['Porridge', 'Pie', 'Brawling', 'Religion', 'Luxury', 'Boots', 'Paste']
+				'Frog': ['Porridge', 'Pie', 'Brawling', 'Religion', 'Luxury', 'Boots', 'Paste'],
+                'Bat': ['Biscuits', 'Paste', 'Skewers', 'Coats', 'Brawling', 'Education']
             }
 			const overlappingNeeds = {};
 			for (const species in SPECIES) {
@@ -65,6 +66,7 @@
                 'Lizard': 'img/species/Lizard_Portrait.png',
                 'Fox': 'img/species/Fox_Portrait.png',
 				'Frog': 'img/species/Frog_Portrait.png',
+				'Bat': 'img/species/Bat_Portrait.png',
                 'Biscuits': 'img/goods/Icon_Resource_Biscuits.png',
                 'Pie': 'img/goods/Icon_Resource_Pie.png',
                 'Porridge': 'img/goods/Icon_Resource_Porridge.png',
@@ -529,7 +531,7 @@
 			const DraggableContainer = () => {
 				const [items, setItems] = useState([
 					{ id: "ingredients", content: <IngredientGrid rows={9} columns={8} /> },
-					{ id: "needs", content: <NeedsGrid rows={4} columns={6} /> },
+					{ id: "needs", content: <NeedsGrid rows={4} columns={7} /> },
 				]);
 
 				const [direction, setDirection] = useState("horizontal");

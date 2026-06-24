@@ -6,7 +6,8 @@ needs = {
     'Harpy': ['Jerky', 'Education', 'Coats', 'Treatment', 'Boots', 'Paste'],
     'Lizard': ['Jerky', 'Pickled Goods', 'Pie', 'Skewers', 'Brawling', 'Boots'],
     'Fox': ['Porridge', 'Pickled Goods', 'Treatment', 'Skewers', 'Religion', 'Boots'],
-    'Frog': ['Porridge', 'Pie', 'Brawling', 'Religion', 'Luxury', 'Boots', 'Paste']
+    'Frog': ['Porridge', 'Pie', 'Brawling', 'Religion', 'Luxury', 'Boots', 'Paste'],
+    'Bat': ['Biscuits', 'Paste', 'Skewers', 'Brawling', 'Education', 'Coats']
 }
 
 overlapping_needs = {}
