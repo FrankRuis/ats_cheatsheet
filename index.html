@@ -695,9 +695,546 @@
 			
 			ReactDOM.render(<DraggableContainer />, document.querySelector("#block_1"));
 			
+			// Raw resources: from wiki "Raw Food" + "Raw Crafting Materials" + Wood + Water + Sea Marrow.
+			// https://wiki.hoodedhorse.com/Against_the_Storm/Resources
+			const RAW_RESOURCES = [
+				'Berries', 'Eggs', 'Fish', 'Insects', 'Meat', 'Mushrooms', 'Roots', 'Vegetables',
+				'Algae', 'Clay', 'Copper Ore', 'Grain', 'Herbs', 'Leather',
+				'Plant Fibre', 'Reeds', 'Resin', 'Salt', 'Scales', 'Stone', 'Wood',
+				'Sea Marrow',
+				'Drizzle Water', 'Clearance Water', 'Storm Water'
+			];
+
+			const INGREDIENT_GROUP_COLORS = ['#1e90ff', '#eb4d4b', '#f1f2f6'];
+			const INGREDIENT_GROUP_COLORS_ALPHA = ['#1e90ff66', '#eb4d4b66', '#f1f2f699'];
+			const INGREDIENT_GROUP_NAMES = ['blue', 'red', 'gray'];
+
+			const isRawResource = (name) => RAW_RESOURCES.includes(name);
+
+			const NEEDED_GOODS = [...new Set(NEEDS.map(n => NEEDTRANS[n] || n))].filter(g => GOODS[g]).sort();
+			const TRANSITIONAL_GOODS = Object.keys(GOODS)
+				.filter(g => !isRawResource(g) && GOODS[g].ingredient_sets && GOODS[g].ingredient_sets.length > 0 && !NEEDED_GOODS.includes(g))
+				.sort();
+			const ingredientsUsedByNeededGoods = new Set();
+			NEEDED_GOODS.forEach(need => {
+				const good = GOODS[need];
+				if (good && good.ingredient_sets) {
+					good.ingredient_sets.forEach(group => group.forEach(ing => ingredientsUsedByNeededGoods.add(ing)));
+				}
+			});
+			const TRANSITIONAL_FOR_NEEDED = TRANSITIONAL_GOODS.filter(g => ingredientsUsedByNeededGoods.has(g));
+			const OTHER_GOODS = TRANSITIONAL_GOODS.filter(g => !ingredientsUsedByNeededGoods.has(g));
+			const SERVICE_BUILDINGS = Object.entries(BUILDINGS)
+				.filter(([, b]) => b.category === 'City Buildings')
+				.map(([id]) => id)
+				.sort();
+			const NEED_TO_SERVICE_BUILDINGS = {};
+			SERVICE_BUILDINGS.forEach(bid => {
+				const b = BUILDINGS[bid];
+				if (b.recipes) {
+					b.recipes.forEach(r => {
+						const need = (r.servedNeed || r.product?.name || '').trim();
+						if (need) {
+							const norm = need === 'Leasiure' ? 'Leisure' : need;
+							if (!(norm in NEED_TO_SERVICE_BUILDINGS)) NEED_TO_SERVICE_BUILDINGS[norm] = [];
+							if (!NEED_TO_SERVICE_BUILDINGS[norm].includes(bid)) NEED_TO_SERVICE_BUILDINGS[norm].push(bid);
+						}
+					});
+				}
+			});
+
+			const isIngredientAvailable = (ingredient, rawSet, visited = new Set()) => {
+				if (visited.has(ingredient)) return false;
+				if (!GOODS[ingredient]) return false;
+				if (isRawResource(ingredient)) return rawSet.has(ingredient);
+				const sets = GOODS[ingredient].ingredient_sets;
+				if (!sets || sets.length === 0) return false;
+				visited.add(ingredient);
+				const available = sets.every(group =>
+					group.some(ing => isIngredientAvailable(ing, rawSet, visited))
+				);
+				visited.delete(ingredient);
+				return available;
+			};
+
+			const getFirstAvailableInGroup = (group, rawSet) =>
+				group.find(ing => isIngredientAvailable(ing, rawSet));
+
+			const getMinRawsToAddForIngredient = (ingredient, rawSet, visited = new Set()) => {
+				if (visited.has(ingredient)) return Infinity;
+				if (!GOODS[ingredient]) return Infinity;
+				if (isRawResource(ingredient)) return rawSet.has(ingredient) ? 0 : 1;
+				const sets = GOODS[ingredient].ingredient_sets;
+				if (!sets || sets.length === 0) return Infinity;
+				visited.add(ingredient);
+				let total = 0;
+				for (const group of sets) {
+					const minCost = Math.min(...group.map(ing => getMinRawsToAddForIngredient(ing, rawSet, visited)));
+					total += minCost;
+				}
+				visited.delete(ingredient);
+				return total;
+			};
+
+			const getMinRawsToAdd = (goodName, currentRawResources) => {
+				const rawSet = new Set(currentRawResources);
+				const good = GOODS[goodName];
+				if (!good || !good.ingredient_sets) return 0;
+				let total = 0;
+				for (const group of good.ingredient_sets) {
+					const minCost = Math.min(...group.map(ing => getMinRawsToAddForIngredient(ing, rawSet)));
+					total += minCost;
+				}
+				return total;
+			};
+
+			const getLookOutFor = (goodName, currentRawResources, hasRecipeBuilding = [], need = null, hasServiceBuilding = []) => {
+				const rawSet = new Set(currentRawResources);
+				const good = GOODS[goodName];
+				if (!good || !good.ingredient_sets) return [];
+				const suggestions = [];
+				const buildingGoodsAdded = new Set();
+				if (need && need in NEEDTRANS && NEED_TO_SERVICE_BUILDINGS[need]) {
+					const providers = NEED_TO_SERVICE_BUILDINGS[need];
+					if (!providers.some(bid => hasServiceBuilding.includes(bid))) {
+						suggestions.push({ type: 'service_building', need });
+					}
+				}
+				const addBuildingSuggestion = (g) => {
+					if (!hasRecipeBuilding.includes(g) && !buildingGoodsAdded.has(g) && isIngredientAvailable(g, rawSet)) {
+						buildingGoodsAdded.add(g);
+						suggestions.push({ type: 'building', good: g });
+					}
+				};
+				if (!hasRecipeBuilding.includes(goodName)) {
+					suggestions.push({ type: 'building', good: goodName });
+					buildingGoodsAdded.add(goodName);
+				}
+				good.ingredient_sets.forEach((group, i) => {
+					group.filter(ing => !isRawResource(ing)).forEach(ing => {
+						if (isIngredientAvailable(ing, rawSet)) addBuildingSuggestion(ing);
+					});
+				});
+				good.ingredient_sets.forEach((group, i) => {
+					const satisfier = getFirstAvailableInGroup(group, rawSet);
+					if (satisfier) return;
+					const rawOptions = group.filter(ing => isRawResource(ing) && !rawSet.has(ing));
+					const transitionalOptions = group.filter(ing => !isRawResource(ing) && !isIngredientAvailable(ing, rawSet));
+					if (rawOptions.length > 0) {
+						const colorAlpha = INGREDIENT_GROUP_COLORS_ALPHA[i] || INGREDIENT_GROUP_COLORS_ALPHA[0];
+						suggestions.push({ type: 'raw', icons: rawOptions, colorAlpha });
+					} else if (transitionalOptions.length > 0) {
+						transitionalOptions.forEach(ing => {
+							if (!hasRecipeBuilding.includes(ing) && buildingGoodsAdded.has(ing)) {
+								buildingGoodsAdded.add(ing);
+								suggestions.push({ type: 'building', good: ing });
+							}
+							const hasBothBuildings = hasRecipeBuilding.includes(goodName) && hasRecipeBuilding.includes(ing);
+							if (!hasBothBuildings) {
+								suggestions.push({ type: 'trader', good: ing });
+							}
+						});
+					}
+				});
+				return suggestions;
+			};
+
+			const getSortedNeeds = (activeSpecies, currentRawResources, hasRecipeBuilding = [], hasServiceBuilding = []) => {
+				const isNeedRowDimmed = (need) => {
+					if (!activeSpecies) return false;
+					const needSpecies = overlappingNeeds[need] || [];
+					return needSpecies.length > 0 && needSpecies.every(s => !activeSpecies.includes(s));
+				};
+				const getLookOutForCount = (need) => {
+					return getLookOutFor(NEEDTRANS[need] || need, currentRawResources, hasRecipeBuilding, need, hasServiceBuilding).length;
+				};
+				return [...NEEDS].sort((a, b) => {
+					const dimmedA = isNeedRowDimmed(a) ? 1 : 0;
+					const dimmedB = isNeedRowDimmed(b) ? 1 : 0;
+					if (dimmedA !== dimmedB) return dimmedA - dimmedB;
+					const rawsA = getMinRawsToAdd(NEEDTRANS[a] || a, currentRawResources);
+					const rawsB = getMinRawsToAdd(NEEDTRANS[b] || b, currentRawResources);
+					if (rawsA !== rawsB) {
+						if (rawsA === Infinity) return 1;
+						if (rawsB === Infinity) return -1;
+						return rawsA - rawsB;
+					}
+					const lookOutA = getLookOutForCount(a);
+					const lookOutB = getLookOutForCount(b);
+					if (lookOutA !== lookOutB) return lookOutA - lookOutB;
+					const speciesA = (overlappingNeeds[a] || []).length;
+					const speciesB = (overlappingNeeds[b] || []).length;
+					return speciesB - speciesA;
+				});
+			};
+
+			const IngredientTree = ({ goodName, currentRawResources, handleIconClick, depth = 0 }) => {
+				const rawSet = new Set(currentRawResources);
+				const good = GOODS[goodName];
+				if (!good || !good.ingredient_sets || good.ingredient_sets.length === 0) return null;
+
+				const sets = good.ingredient_sets;
+				const satisfiers = sets.map(group => getFirstAvailableInGroup(group, rawSet));
+				return (
+					<div className="ingredient-tree-container">
+						<div className="ingredient-tree-row" style={{ display: 'grid', gridTemplateColumns: `repeat(${sets.length}, 1fr)`, gap: 4 }}>
+							{sets.map((group, i) => {
+								const satisfier = satisfiers[i];
+								const rawCheckedInGroup = group.filter(ing => isRawResource(ing) && rawSet.has(ing));
+								const rawAltCount = rawCheckedInGroup.length - 1;
+								const showRawAltCount = rawAltCount > 0;
+								const rawTooltip = showRawAltCount
+									? rawCheckedInGroup.map(ing => GOODS[ing]?.displayName || ing).join(', ')
+									: null;
+								const color = INGREDIENT_GROUP_COLORS_ALPHA[i] || INGREDIENT_GROUP_COLORS_ALPHA[0];
+								return (
+									<div
+										key={i}
+										className="ingredient-group-box"
+										style={{ backgroundColor: color }}
+										onClick={() => satisfier && handleIconClick(satisfier)}
+									>
+										{satisfier ? (
+											<>
+												<span className="group-check"><i className="fa-solid fa-check"></i></span>
+												<span title={rawTooltip || (GOODS[satisfier] && GOODS[satisfier].displayName)} style={{ display: 'inline-flex', alignItems: 'center' }}>
+													{GOODS[satisfier] && (
+														<img
+															src={GOODS[satisfier].icon_path}
+															alt={GOODS[satisfier].displayName}
+															onClick={(e) => { e.stopPropagation(); handleIconClick(satisfier); }}
+														/>
+													)}
+													{showRawAltCount && <span className="ingredient-group-raw-alt">+{rawAltCount}</span>}
+												</span>
+											</>
+										) : null}
+									</div>
+								);
+							})}
+						</div>
+						<div className="ingredient-tree-columns" style={{ display: 'grid', gridTemplateColumns: `repeat(${sets.length}, 1fr)`, gap: 8 }}>
+							{sets.map((group, i) => {
+								const satisfier = satisfiers[i];
+								return (
+									<div key={i} className="ingredient-tree-column">
+										{satisfier && !isRawResource(satisfier) && (
+											<IngredientTree
+												goodName={satisfier}
+												currentRawResources={currentRawResources}
+												handleIconClick={handleIconClick}
+												depth={depth + 1}
+											/>
+										)}
+									</div>
+								);
+							})}
+						</div>
+					</div>
+				);
+			};
+
+			const SuggestorContent = () => {
+				const [currentRawResources, setCurrentRawResources] = useState([]);
+				const [activeSpecies, setActiveSpecies] = useState(null);
+				const [hasRecipeBuilding, setHasRecipeBuilding] = useState([]);
+				const [hasServiceBuilding, setHasServiceBuilding] = useState([]);
+
+				const handleRecipeBuildingChange = (good) => {
+					setHasRecipeBuilding(prev => prev.includes(good) ? prev.filter(g => g !== good) : [...prev, good]);
+				};
+
+				const handleServiceBuildingChange = (buildingId) => {
+					setHasServiceBuilding(prev => prev.includes(buildingId) ? prev.filter(b => b !== buildingId) : [...prev, buildingId]);
+				};
+
+				const handleCheckboxChange = (resource) => {
+					setCurrentRawResources(prev => {
+						if (prev.includes(resource)) {
+							return prev.filter(r => r !== resource);
+						} else {
+							return [...prev, resource];
+						}
+					});
+				};
+
+				const handleSpeciesClick = (species) => {
+					setActiveSpecies(prev => {
+						if (!prev) return [species];
+						if (prev.includes(species)) {
+							const next = prev.filter(s => s !== species);
+							return next.length ? next : null;
+						}
+						if (prev.length >= 3) return prev;
+						return [...prev, species];
+					});
+				};
+
+				const handleIconClick = (resource) => {
+					if (document.getElementById(resource)) document.getElementById(resource).click();
+				};
+
+				const speciesNames = Object.keys(SPECIES);
+				const isSpeciesLit = (species) => !activeSpecies || activeSpecies.includes(species);
+				const isNeedRowDimmed = (need) => {
+					if (!activeSpecies) return false;
+					const needSpecies = overlappingNeeds[need] || [];
+					return needSpecies.length > 0 && needSpecies.every(s => !activeSpecies.includes(s));
+				};
+
+				return (
+					<div>
+						<div className="ats-container icon-grid" style={{ maxWidth: '1200px', marginBottom: '15px' }}>
+							<div className="grid-header ats-infobox-header-title">Species</div>
+							<div className="icon-grid-wrapper">
+								<div className="icon-row header-row">
+									{speciesNames.map(species => (
+										<div
+											key={species}
+											className={`ats-single-ingredient-icon icon${isSpeciesLit(species) ? '' : ' icon-inactive'}`}
+											onClick={() => handleSpeciesClick(species)}
+											style={{ cursor: 'pointer' }}
+										>
+											<img src={SPECIES_ICONS[species]} alt={species} title={species} />
+										</div>
+									))}
+								</div>
+							</div>
+						</div>
+						<div className="ats-container icon-grid suggestor-main" style={{ maxWidth: '1200px', display: 'flex', flexDirection: 'row', gap: '20px', alignItems: 'flex-start' }}>
+							<div style={{ flex: '0 0 auto', minWidth: '220px', textAlign: 'left' }}>
+								<div className="grid-header ats-infobox-header-title">Raw resources</div>
+								<div className="icon-grid-wrapper">
+									<div style={{ display: 'flex', flexDirection: 'column', padding: '8px 0' }}>
+										{RAW_RESOURCES.map(resource => (
+											<label key={resource} className="suggestor-raw-resource">
+												<input
+													type="checkbox"
+													checked={currentRawResources.includes(resource)}
+													onChange={() => handleCheckboxChange(resource)}
+												/>
+												{GOODS[resource] && (
+													<img
+														src={GOODS[resource].icon_path}
+														alt={GOODS[resource].displayName}
+														title={GOODS[resource].displayName}
+														onClick={() => handleIconClick(resource)}
+													/>
+												)}
+												<span>{GOODS[resource] ? GOODS[resource].displayName : resource}</span>
+											</label>
+										))}
+									</div>
+								</div>
+							</div>
+							<div style={{ flex: '1 1 auto', minWidth: '300px' }} className="suggestor-suggested-need">
+								<div className="grid-header ats-infobox-header-title">Suggested Need</div>
+								<div className="icon-grid-wrapper">
+									<table className="data-table suggestor-data-table">
+										<thead>
+											<tr>
+												<th>Needed Good</th>
+												<th>Species</th>
+												<th>Look out for</th>
+											</tr>
+										</thead>
+										<tbody>
+											{getSortedNeeds(activeSpecies, currentRawResources, hasRecipeBuilding, hasServiceBuilding).map(need => (
+												<tr key={need} className={isNeedRowDimmed(need) ? 'suggestor-row-dimmed' : ''}>
+													<td>
+														<img
+															src={SPECIES_ICONS[need] || (NEEDTRANS[need] && GOODS[NEEDTRANS[need]] && GOODS[NEEDTRANS[need]].icon_path)}
+															alt={need}
+															style={{ maxWidth: '60px', maxHeight: '60px', margin: '10px' }}
+															onClick={() => handleIconClick(NEEDTRANS[need] || need)}
+														/>
+														{need}
+														<IngredientTree
+															goodName={NEEDTRANS[need] || need}
+															currentRawResources={currentRawResources}
+															handleIconClick={handleIconClick}
+														/>
+													</td>
+													<td>
+														{overlappingNeeds[need] && overlappingNeeds[need].map((species) => (
+															<div key={species} className={!isSpeciesLit(species) ? 'suggestor-dimmed' : ''}>
+																<img onClick={() => handleIconClick(species)} alt={species} src={SPECIES_ICONS[species]} width="30" height="30"/> <span>{species}</span>
+															</div>
+														))}
+													</td>
+													<td>
+														{getLookOutFor(NEEDTRANS[need] || need, currentRawResources, hasRecipeBuilding, need, hasServiceBuilding).map((s, idx) => (
+															<div key={idx} className="look-out-for-item">
+																{s.type === 'service_building' ? (
+																	<>
+																		<span>Building to provide </span>
+																		{SPECIES_ICONS[s.need] && (
+																			<img
+																				src={SPECIES_ICONS[s.need]}
+																				alt={s.need}
+																				title={s.need}
+																				width="24"
+																				height="24"
+																				onClick={() => handleIconClick(NEEDTRANS[s.need] || s.need)}
+																				style={{ cursor: 'pointer', verticalAlign: 'middle', marginRight: 4 }}
+																			/>
+																		)}
+																	</>
+																) : s.type === 'building' ? (
+																	<>
+																		<span>Building with a </span>
+																		{GOODS[s.good] && (
+																			<img
+																				src={GOODS[s.good].icon_path}
+																				alt={GOODS[s.good].displayName}
+																				title={GOODS[s.good].displayName}
+																				width="24"
+																				height="24"
+																				onClick={() => handleIconClick(s.good)}
+																				style={{ cursor: 'pointer', verticalAlign: 'middle', marginRight: 4 }}
+																			/>
+																		)}
+																		<span> recipe</span>
+																	</>
+																) : s.type === 'raw' ? (
+																	<span
+																		className="look-out-for-raw-group"
+																		style={{ backgroundColor: s.colorAlpha }}
+																	>
+																		<span>One of </span>
+																		{s.icons.filter(ing => GOODS[ing]).map(ing => (
+																			<img
+																				key={ing}
+																				src={GOODS[ing].icon_path}
+																				alt={GOODS[ing].displayName}
+																				title={GOODS[ing].displayName}
+																				width="24"
+																				height="24"
+																				onClick={() => handleIconClick(ing)}
+																				style={{ cursor: 'pointer', verticalAlign: 'middle', margin: '0 1px' }}
+																			/>
+																		))}
+																	</span>
+																) : (
+																	<>
+																		{GOODS[s.good] && (
+																			<img
+																				src={GOODS[s.good].icon_path}
+																				alt={GOODS[s.good].displayName}
+																				title={GOODS[s.good].displayName}
+																				width="24"
+																				height="24"
+																				onClick={() => handleIconClick(s.good)}
+																				style={{ cursor: 'pointer', verticalAlign: 'middle', marginRight: 4 }}
+																			/>
+																		)}
+																		<span>for sale at a trader</span>
+																	</>
+																)}
+															</div>
+														))}
+													</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div style={{ flex: '0 0 auto', minWidth: '220px', textAlign: 'left' }}>
+								<div className="grid-header ats-infobox-header-title">Have Recipe Building</div>
+								<div className="icon-grid-wrapper">
+									<div style={{ display: 'flex', flexDirection: 'column', padding: '8px 0' }}>
+										<div style={{ fontWeight: 600, marginBottom: 4 }}>Transitional</div>
+										{TRANSITIONAL_FOR_NEEDED.map(good => (
+											<label key={good} className="suggestor-raw-resource">
+												<input
+													type="checkbox"
+													checked={hasRecipeBuilding.includes(good)}
+													onChange={() => handleRecipeBuildingChange(good)}
+												/>
+												{GOODS[good] && (
+													<img
+														src={GOODS[good].icon_path}
+														alt={GOODS[good].displayName}
+														title={GOODS[good].displayName}
+														onClick={() => handleIconClick(good)}
+														style={{ cursor: 'pointer' }}
+													/>
+												)}
+												<span>{GOODS[good] ? GOODS[good].displayName : good}</span>
+											</label>
+										))}
+										<div style={{ fontWeight: 600, marginTop: 12, marginBottom: 4 }}>Needed goods</div>
+										{NEEDED_GOODS.map(good => (
+											<label key={good} className="suggestor-raw-resource">
+												<input
+													type="checkbox"
+													checked={hasRecipeBuilding.includes(good)}
+													onChange={() => handleRecipeBuildingChange(good)}
+												/>
+												{GOODS[good] && (
+													<img
+														src={GOODS[good].icon_path}
+														alt={GOODS[good].displayName}
+														title={GOODS[good].displayName}
+														onClick={() => handleIconClick(good)}
+														style={{ cursor: 'pointer' }}
+													/>
+												)}
+												<span>{GOODS[good] ? GOODS[good].displayName : good}</span>
+											</label>
+										))}
+										<div style={{ fontWeight: 600, marginTop: 12, marginBottom: 4 }}>Service Buildings</div>
+										{SERVICE_BUILDINGS.map(bid => (
+											<label key={bid} className="suggestor-raw-resource">
+												<input
+													type="checkbox"
+													checked={hasServiceBuilding.includes(bid)}
+													onChange={() => handleServiceBuildingChange(bid)}
+												/>
+												{BUILDINGS[bid] && (
+													<img
+														src={BUILDINGS[bid].icon}
+														alt={BUILDINGS[bid].displayName}
+														title={BUILDINGS[bid].displayName}
+														style={{ cursor: 'pointer' }}
+													/>
+												)}
+												<span>{BUILDINGS[bid] ? BUILDINGS[bid].displayName : bid}</span>
+											</label>
+										))}
+										<div style={{ fontWeight: 600, marginTop: 12, marginBottom: 4 }}>Other</div>
+										{OTHER_GOODS.map(good => (
+											<label key={good} className="suggestor-raw-resource">
+												<input
+													type="checkbox"
+													checked={hasRecipeBuilding.includes(good)}
+													onChange={() => handleRecipeBuildingChange(good)}
+												/>
+												{GOODS[good] && (
+													<img
+														src={GOODS[good].icon_path}
+														alt={GOODS[good].displayName}
+														title={GOODS[good].displayName}
+														onClick={() => handleIconClick(good)}
+														style={{ cursor: 'pointer' }}
+													/>
+												)}
+												<span>{GOODS[good] ? GOODS[good].displayName : good}</span>
+											</label>
+										))}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				);
+			};
+
 			const TABS = [
 				{ id: 'buildings-table', label: 'Buildings', content: <DataTable /> },
 				{ id: 'overlapping-needs', label: 'Needs Info', content: <OverlappingNeeds /> },
+				{ id: 'suggestor', label: 'Suggestor', content: <SuggestorContent /> },
 			];
 
 			const TabsComponent = () => {
