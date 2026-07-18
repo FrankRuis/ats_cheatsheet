@@ -279,6 +279,30 @@ table.data-table > tbody > tr.category-row:hover {
     margin-right: 6px;
 }
 
+button.flawless-toggle {
+	background: transparent;
+	border: 1px solid var(--ats-brown);
+	border-radius: 3px;
+	color: var(--ats-gold);
+	cursor: pointer;
+	font-family: var(--ats-body), sans-serif;
+	font-size: 10pt;
+	margin-left: 8px;
+	padding: 5px 9px;
+}
+
+button.flawless-toggle:hover {
+	border-color: var(--ats-gold);
+	color: var(--ats-bright-gold);
+}
+
+button.flawless-toggle-active {
+	background: var(--ats-gold);
+	border-color: var(--ats-bright-gold);
+	color: var(--ats-dark);
+	font-weight: 600;
+}
+
 .affinity-picker .affinity-portrait {
     width: 42px;
     height: 42px;
@@ -831,4 +855,29 @@ h1 > a > .svg-inline--fa {
 
 h1 > a > .svg-inline--fa:hover {
     color: var(--ats-default, #e0e0d0);
+}
+
+.data-version {
+	color: var(--ats-gold);
+	font-family: var(--ats-body), sans-serif;
+	font-size: 10pt;
+	letter-spacing: 0.08em;
+	margin: -12px 0 12px;
+}
+
+.state-tools {
+	margin: -4px 0 8px;
+}
+
+button.state-reset {
+	background: transparent;
+	border: 1px solid var(--ats-brown);
+	color: var(--ats-gold);
+	cursor: pointer;
+	padding: 3px 8px;
+}
+
+button.state-reset:hover {
+	color: var(--ats-bright-gold);
+	border-color: var(--ats-gold);
 }
