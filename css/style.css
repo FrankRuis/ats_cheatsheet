@@ -340,11 +340,19 @@ button.flawless-toggle-active {
     margin: 0 8px;
 }
 
-/* Worker proficiency marker (10% double yield) next to the building name */
-.prof-badge {
-    color: var(--ats-yellow, gold);
+/* Worker bonus markers next to the building name */
+.prof-badge,
+.comfort-badge {
     margin-left: 8px;
     white-space: nowrap;
+}
+
+.prof-badge {
+    color: var(--ats-yellow, gold);
+}
+
+.comfort-badge {
+    color: #e88470;
 }
 
 .affinity-hint {
@@ -565,6 +573,21 @@ td:has(> div.ats-building-icon) {
 
 .icon-inactive {
     opacity: 0.2;
+}
+
+.need-shared-two img,
+.need-shared-three img {
+	transition: box-shadow 0.2s ease;
+}
+
+.need-shared-two img {
+	box-shadow: 0 0 12px 5px rgba(226, 205, 157, 0.85);
+}
+
+.need-shared-three img {
+	box-shadow:
+		0 0 14px 5px rgba(226, 205, 157, 0.95),
+		0 0 26px 9px rgba(225, 170, 70, 0.50);
 }
 
 /* Other */

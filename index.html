@@ -125,6 +125,15 @@
                 'Bat': 'Metallurgy'
             };
 
+            const SPECIES_COMFORT = {
+                'Human': 'Brewing',
+                'Beaver': 'Engineering',
+                'Lizard': 'Warmth',
+                'Harpy': 'Tailoring',
+                'Fox': 'Cooperation',
+                'Frog': 'Rainwater'
+            };
+
             const gradeStars = (grade) => grade ? (grade.split('★').length - 1) : 0;
 
             // Species in speciesList whose needs this product fulfills (foods/clothing
@@ -136,6 +145,13 @@
             const proficientSpecies = (item, speciesList) => speciesList.filter(s =>
                 item.proficiencyTags.includes(SPECIES_PROFICIENCY[s])
             );
+
+            const comfortedSpecies = (item, speciesList) => speciesList.filter(s =>
+                SPECIES_COMFORT[s] && item.comfortTags.includes(SPECIES_COMFORT[s])
+            );
+
+            const workerBonusCount = (item, speciesList) =>
+                proficientSpecies(item, speciesList).length + comfortedSpecies(item, speciesList).length;
 
             // Higher = the building's output better matches the species' needs:
             // each liked product scores (species that want it) x (1 + recipe stars);
@@ -199,6 +215,7 @@
                         id: building,
                         category: BUILDINGS[building].category,
                         proficiencyTags: BUILDINGS[building].proficiencyTags || [],
+                        comfortTags: BUILDINGS[building].comfortTags || [],
                     });
                 }
                 return { formattedBuildings, per_cat };
@@ -347,6 +364,13 @@
                     return gradient;
                 }
 
+				const getSharedNeedClass = (iconName) => {
+					const sharedCount = getColors(iconName).length;
+					if (sharedCount === 3) return ' need-shared-three';
+					if (sharedCount === 2) return ' need-shared-two';
+					return '';
+				};
+
                 const handleIconClick = (iconName) => {
                     if (!(iconName in SPECIES)) {
                         if (iconName in NEEDTRANS) iconName = NEEDTRANS[iconName];
@@ -452,7 +476,7 @@
                                     row.map((iconName) => (
                                         <div
                                         key={iconName}
-                                        className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
+                                        className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}${getSharedNeedClass(iconName)}`}
                                         onClick={() => handleIconClick(iconName)}
                                         style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: (isIconHighlighted(iconName) && activeSpecies) ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
                                         >
@@ -1410,10 +1434,10 @@
 
 				const ranked = FORMATTED_BUILDINGS
 					.filter(item => (includeFlawless || !item.building.startsWith('Flawless '))
-						&& (hasLikedProduct(item, species) || proficientSpecies(item, species).length > 0))
+						&& (hasLikedProduct(item, species) || workerBonusCount(item, species) > 0))
 					.sort((a, b) =>
 						affinityScore(b, species) - affinityScore(a, species)
-						|| proficientSpecies(b, species).length - proficientSpecies(a, species).length
+						|| workerBonusCount(b, species) - workerBonusCount(a, species)
 						|| (a.building < b.building ? -1 : a.building > b.building ? 1 : 0));
 
 				return (
@@ -1459,6 +1483,18 @@
 														<span className="prof-badge" title={proficientSpecies(item, species).map(s => `${s} proficiency (${SPECIES_PROFICIENCY[s]}): 10% chance of double yield`).join('\n')}>
 															{'⚒ '}
 															{proficientSpecies(item, species).map(s => (
+																<img key={s} src={SPECIES_ICONS[s]} alt={s} className="liked-badge"/>
+															))}
+														</span>
+													}
+													{comfortedSpecies(item, species).length > 0 &&
+														<span className="comfort-badge" title={comfortedSpecies(item, species).map(s =>
+															s === 'Fox'
+																? `${s} comfort (${SPECIES_COMFORT[s]}): +5 Resolve when 3 or more Foxes work here`
+																: `${s} comfort (${SPECIES_COMFORT[s]}): +5 Resolve while working here`
+														).join('\n')}>
+															{'♥ '}
+															{comfortedSpecies(item, species).map(s => (
 																<img key={s} src={SPECIES_ICONS[s]} alt={s} className="liked-badge"/>
 															))}
 														</span>
