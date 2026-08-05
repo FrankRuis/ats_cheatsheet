@@ -6,6 +6,8 @@
 
 A simple local interactive web app for against the storm, where you can see which resources require which ingredients to make, or which resources are used in which recipes, as well as all the (shared) needs for the species of your current game.
 
+Game data: **1.10**, updated July 2026. Interface selections are saved in the browser and restored on the next visit.
+
 Works locally in your web browser without any setup, just click the green `code` button at the top right of the repository and choose download as zip, unzip, and open `index.html`.
 If you download the files I'm currently pulling from CDNs in the `index.html` header and update it to point at the local version it should also work offline.
 

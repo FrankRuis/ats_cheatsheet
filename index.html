@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Against the Storm Cheatsheet</title>
     <link rel="icon" href="img/ats.ico"/>
-	<link rel="stylesheet" href="css/style.css?v=1.8-bats">
+	<link rel="stylesheet" href="css/style.css?v=july-2026">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
     <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
@@ -18,6 +18,7 @@
 <body>
     <div class="content">
         <h1 id="firstHeading" class="firstHeading mw-first-heading"><span class="mw-page-title-main">Against the Storm Cheatsheet</span> <a href="https://github.com/FrankRuis/ats_cheatsheet" target="_blank"><i class="fa-brands fa-github"></i></a></h1>
+		<div class="data-version">Game data: 1.10 · Updated July 2026</div>
 
         <div class="container-block" id="block_1">
 
@@ -34,6 +35,32 @@
         <script type="text/babel">
             const { useState, useEffect } = React;
 			const { DragDropContext, Droppable, Draggable } = ReactBeautifulDnd;
+			const SAVED_STATE_KEY = 'ats-cheatsheet:v1';
+
+			const loadSavedState = () => {
+				try {
+					return JSON.parse(localStorage.getItem(SAVED_STATE_KEY)) || {};
+				} catch (error) {
+					return {};
+				}
+			};
+
+			const saveState = (changes) => {
+				try {
+					localStorage.setItem(SAVED_STATE_KEY, JSON.stringify({ ...loadSavedState(), ...changes }));
+				} catch (error) {
+					// The cheatsheet still works when browser storage is unavailable.
+				}
+			};
+
+			const resetSavedState = () => {
+				try {
+					localStorage.removeItem(SAVED_STATE_KEY);
+				} catch (error) {
+					// Reload still restores defaults when browser storage is unavailable.
+				}
+				window.location.reload();
+			};
             
             // Parse the json string from the goods.json file that we loaded in the html head section
             const GOODS = JSON.parse(goods_data);
@@ -98,6 +125,15 @@
                 'Bat': 'Metallurgy'
             };
 
+            const SPECIES_COMFORT = {
+                'Human': 'Brewing',
+                'Beaver': 'Engineering',
+                'Lizard': 'Warmth',
+                'Harpy': 'Tailoring',
+                'Fox': 'Cooperation',
+                'Frog': 'Rainwater'
+            };
+
             const gradeStars = (grade) => grade ? (grade.split('★').length - 1) : 0;
 
             // Species in speciesList whose needs this product fulfills (foods/clothing
@@ -109,6 +145,13 @@
             const proficientSpecies = (item, speciesList) => speciesList.filter(s =>
                 item.proficiencyTags.includes(SPECIES_PROFICIENCY[s])
             );
+
+            const comfortedSpecies = (item, speciesList) => speciesList.filter(s =>
+                SPECIES_COMFORT[s] && item.comfortTags.includes(SPECIES_COMFORT[s])
+            );
+
+            const workerBonusCount = (item, speciesList) =>
+                proficientSpecies(item, speciesList).length + comfortedSpecies(item, speciesList).length;
 
             // Higher = the building's output better matches the species' needs:
             // each liked product scores (species that want it) x (1 + recipe stars);
@@ -172,6 +215,7 @@
                         id: building,
                         category: BUILDINGS[building].category,
                         proficiencyTags: BUILDINGS[building].proficiencyTags || [],
+                        comfortTags: BUILDINGS[building].comfortTags || [],
                     });
                 }
                 return { formattedBuildings, per_cat };
@@ -180,15 +224,23 @@
 
             // Ingredients
             const IngredientGrid = ({ rows, columns }) => {
-                const [highlightedSet, setHighlightedSet] = useState(null);
-                const [activeElement, setActiveElement] = useState(null);
+				const savedIngredientState = loadSavedState();
+				const initialActiveElement = savedIngredientState.activeIngredient in GOODS ? savedIngredientState.activeIngredient : null;
+				const initialReverseIngredients = savedIngredientState.reverseIngredients === true;
+				const [highlightedSet, setHighlightedSet] = useState(initialActiveElement
+					? (initialReverseIngredients ? GOODS[initialActiveElement]['reverse_set'] : GOODS[initialActiveElement]['ingredient_sets'])
+					: null);
+				const [activeElement, setActiveElement] = useState(initialActiveElement);
+				const [reverseIngredients, setReverseIngredients] = useState(initialReverseIngredients);
 
                 const handleIconClick = (iconName) => {
-                    const newHighlightedSet = document.getElementById('reverse-ingredients').checked ? GOODS[iconName]['reverse_set'] : GOODS[iconName]['ingredient_sets'];
+					const newHighlightedSet = reverseIngredients ? GOODS[iconName]['reverse_set'] : GOODS[iconName]['ingredient_sets'];
+					let newActiveElement = iconName;
                     if (highlightedSet) {
                         if (highlightedSet.includes(iconName) || activeElement === iconName) {
                             setHighlightedSet(null);
                             setActiveElement(null);
+							newActiveElement = null;
                         } else {
                             setHighlightedSet(newHighlightedSet);
                             setActiveElement(iconName);
@@ -197,8 +249,18 @@
                         setHighlightedSet(newHighlightedSet);
                         setActiveElement(iconName);
                     }
+					saveState({ activeIngredient: newActiveElement });
 					document.getElementById("AllButton").click();
                 };
+
+				const handleReverseChange = (event) => {
+					const checked = event.target.checked;
+					setReverseIngredients(checked);
+					saveState({ reverseIngredients: checked });
+					if (activeElement) {
+						setHighlightedSet(checked ? GOODS[activeElement]['reverse_set'] : GOODS[activeElement]['ingredient_sets']);
+					}
+				};
 
                 const isIconHighlighted = (iconName) => {
                     if (!highlightedSet || !activeElement) return true;
@@ -239,7 +301,7 @@
                         {"Ingredient Grid"}
                         <label className="switch tooltip">
                             <span className="tooltiptext">Requires / Needed for</span>
-                            <input type="checkbox" id="reverse-ingredients" />
+							<input type="checkbox" id="reverse-ingredients" checked={reverseIngredients} onChange={handleReverseChange} />
                             <span className="slider slider-round"></span>
                         </label>
                     </div>
@@ -269,8 +331,15 @@
 
             // Needs
             const NeedsGrid = ({ rows, columns }) => {
-                const [highlightedSet, setHighlightedSet] = useState(null);
-                const [activeSpecies, setActiveSpecies] = useState(null);
+				const savedSpecies = loadSavedState().species;
+				const initialActiveSpecies = Array.isArray(savedSpecies)
+					? savedSpecies.filter(name => name in SPECIES).slice(0, 3)
+					: [];
+				const [highlightedSet, setHighlightedSet] = useState(initialActiveSpecies.length > 0
+					? initialActiveSpecies.map(name => [...SPECIES[name], name])
+					: null);
+				const [activeSpecies, setActiveSpecies] = useState(initialActiveSpecies.length > 0 ? initialActiveSpecies : null);
+				window.currentSpeciesSelection = activeSpecies ? [...activeSpecies] : [];
 
                 const getColors = (iconName) => {
                     if (!highlightedSet || !activeSpecies) return [];
@@ -295,6 +364,13 @@
                     return gradient;
                 }
 
+				const getSharedNeedClass = (iconName) => {
+					const sharedCount = getColors(iconName).length;
+					if (sharedCount === 3) return ' need-shared-three';
+					if (sharedCount === 2) return ' need-shared-two';
+					return '';
+				};
+
                 const handleIconClick = (iconName) => {
                     if (!(iconName in SPECIES)) {
                         if (iconName in NEEDTRANS) iconName = NEEDTRANS[iconName];
@@ -302,7 +378,7 @@
                         return;
                     }
 
-                    var newActiveSpecies = activeSpecies;
+					var newActiveSpecies = activeSpecies ? [...activeSpecies] : null;
                     if (activeSpecies) {
                         if (activeSpecies.includes(iconName)) {
                             if (activeSpecies.length == 1) {
@@ -325,6 +401,7 @@
 
                     // Broadcast for the Best Buildings tab (separate React tree)
                     window.currentSpeciesSelection = newActiveSpecies ? [...newActiveSpecies] : [];
+					saveState({ species: window.currentSpeciesSelection });
                     window.dispatchEvent(new CustomEvent('speciesSelection', { detail: window.currentSpeciesSelection }));
                 };
 
@@ -332,8 +409,7 @@
                     var newHighlightedSet = null;
                     if (newActiveSpecies) {
                         for (const iconName of newActiveSpecies) {
-                            var names = SPECIES[iconName];
-                            names.push(iconName);
+							var names = [...SPECIES[iconName], iconName];
                             if (!newHighlightedSet) {
                                 newHighlightedSet = [names];
                             } else {
@@ -400,7 +476,7 @@
                                     row.map((iconName) => (
                                         <div
                                         key={iconName}
-                                        className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
+                                        className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}${getSharedNeedClass(iconName)}`}
                                         onClick={() => handleIconClick(iconName)}
                                         style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: (isIconHighlighted(iconName) && activeSpecies) ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
                                         >
@@ -418,12 +494,25 @@
 			// Buildings data table
 			const DataTable = () => {
 				const per_cat = PER_CAT;
+				const savedTableState = loadSavedState();
+				const categoryNames = Object.keys(per_cat);
+				const initialActiveCats = Array.isArray(savedTableState.activeCategories)
+					? savedTableState.activeCategories.filter(category => categoryNames.includes(category))
+					: categoryNames;
+				const initialActiveFilts = Array.isArray(savedTableState.buildingFilters)
+					? savedTableState.buildingFilters.filter(filter => ['Products', 'Costs'].includes(filter))
+					: ['Products'];
 				const [data, setData] = useState(FORMATTED_BUILDINGS);
-				const [searchTerm, setSearchTerm] = useState('');
-				const [sortKey, setSortKey] = useState('category');
-				const [sortDirection, setSortDirection] = useState('asc');
-				const [activeCats, setActiveCats] = useState(Object.keys(per_cat));
-				const [activeFilts, setActiveFilts] = useState(["Products"]);
+				const [searchTerm, setSearchTerm] = useState(typeof savedTableState.buildingSearch === 'string' ? savedTableState.buildingSearch : '');
+				const [sortKey, setSortKey] = useState(['category', 'building', 'products', 'cost'].includes(savedTableState.sortKey) ? savedTableState.sortKey : 'category');
+				const [sortDirection, setSortDirection] = useState(['asc', 'desc'].includes(savedTableState.sortDirection) ? savedTableState.sortDirection : 'asc');
+				const [activeCats, setActiveCats] = useState(initialActiveCats);
+				const [activeFilts, setActiveFilts] = useState(initialActiveFilts);
+
+				useEffect(() => saveState({ buildingSearch: searchTerm }), [searchTerm]);
+				useEffect(() => saveState({ sortKey, sortDirection }), [sortKey, sortDirection]);
+				useEffect(() => saveState({ activeCategories: activeCats }), [activeCats]);
+				useEffect(() => saveState({ buildingFilters: activeFilts }), [activeFilts]);
 
 				const handleSearch = (event) => {
 					setSearchTerm(event.target.value);
@@ -1008,10 +1097,27 @@
 			};
 
 			const SuggestorContent = () => {
-				const [currentRawResources, setCurrentRawResources] = useState([]);
-				const [activeSpecies, setActiveSpecies] = useState(null);
-				const [hasRecipeBuilding, setHasRecipeBuilding] = useState([]);
-				const [hasServiceBuilding, setHasServiceBuilding] = useState([]);
+				const savedSuggestorState = loadSavedState();
+				const speciesNames = Object.keys(SPECIES);
+				const recipeBuildingGoods = [...TRANSITIONAL_FOR_NEEDED, ...NEEDED_GOODS, ...OTHER_GOODS];
+				const savedSuggestorSpecies = Array.isArray(savedSuggestorState.suggestorSpecies)
+					? savedSuggestorState.suggestorSpecies.filter(species => speciesNames.includes(species)).slice(0, 3)
+					: [];
+				const [currentRawResources, setCurrentRawResources] = useState(Array.isArray(savedSuggestorState.suggestorRawResources)
+					? savedSuggestorState.suggestorRawResources.filter(resource => RAW_RESOURCES.includes(resource))
+					: []);
+				const [activeSpecies, setActiveSpecies] = useState(savedSuggestorSpecies.length ? savedSuggestorSpecies : null);
+				const [hasRecipeBuilding, setHasRecipeBuilding] = useState(Array.isArray(savedSuggestorState.suggestorRecipeBuildings)
+					? savedSuggestorState.suggestorRecipeBuildings.filter(good => recipeBuildingGoods.includes(good))
+					: []);
+				const [hasServiceBuilding, setHasServiceBuilding] = useState(Array.isArray(savedSuggestorState.suggestorServiceBuildings)
+					? savedSuggestorState.suggestorServiceBuildings.filter(building => SERVICE_BUILDINGS.includes(building))
+					: []);
+
+				useEffect(() => saveState({ suggestorRawResources: currentRawResources }), [currentRawResources]);
+				useEffect(() => saveState({ suggestorSpecies: activeSpecies || [] }), [activeSpecies]);
+				useEffect(() => saveState({ suggestorRecipeBuildings: hasRecipeBuilding }), [hasRecipeBuilding]);
+				useEffect(() => saveState({ suggestorServiceBuildings: hasServiceBuilding }), [hasServiceBuilding]);
 
 				const handleRecipeBuildingChange = (good) => {
 					setHasRecipeBuilding(prev => prev.includes(good) ? prev.filter(g => g !== good) : [...prev, good]);
@@ -1047,7 +1153,6 @@
 					if (document.getElementById(resource)) document.getElementById(resource).click();
 				};
 
-				const speciesNames = Object.keys(SPECIES);
 				const isSpeciesLit = (species) => !activeSpecies || activeSpecies.includes(species);
 				const isNeedRowDimmed = (need) => {
 					if (!activeSpecies) return false;
@@ -1307,13 +1412,15 @@
 			// Best buildings for the species selected in the Species Needs grid above
 			const BestBuildings = () => {
 				const [species, setSpecies] = useState(window.currentSpeciesSelection || []);
-				const [includeFlawless, setIncludeFlawless] = useState(false);
+				const [includeFlawless, setIncludeFlawless] = useState(loadSavedState().includeFlawless === true);
 
 				useEffect(() => {
 					const handler = (e) => setSpecies(e.detail || []);
 					window.addEventListener('speciesSelection', handler);
 					return () => window.removeEventListener('speciesSelection', handler);
 				}, []);
+
+				useEffect(() => saveState({ includeFlawless }), [includeFlawless]);
 
 				// Toggle through the Species Needs grid so both stay in sync
 				const toggleSpecies = (name) => {
@@ -1326,11 +1433,11 @@
 				};
 
 				const ranked = FORMATTED_BUILDINGS
-					.filter(item => (includeFlawless || !item.id.startsWith('Flawless '))
-						&& (hasLikedProduct(item, species) || proficientSpecies(item, species).length > 0))
+					.filter(item => (includeFlawless || !item.building.startsWith('Flawless '))
+						&& (hasLikedProduct(item, species) || workerBonusCount(item, species) > 0))
 					.sort((a, b) =>
 						affinityScore(b, species) - affinityScore(a, species)
-						|| proficientSpecies(b, species).length - proficientSpecies(a, species).length
+						|| workerBonusCount(b, species) - workerBonusCount(a, species)
 						|| (a.building < b.building ? -1 : a.building > b.building ? 1 : 0));
 
 				return (
@@ -1349,9 +1456,9 @@
 								<button type="button"
 									aria-pressed={includeFlawless}
 									title="Include rare Flawless buildings in the rankings"
-									className={includeFlawless ? 'cat-active' : 'cat-inactive'}
+									className={`flawless-toggle${includeFlawless ? ' flawless-toggle-active' : ''}`}
 									onClick={() => setIncludeFlawless(current => !current)}>
-									Include Flawless
+									Flawless: {includeFlawless ? 'On' : 'Off'}
 								</button>
 							</div>
 							{species.length === 0 ?
@@ -1376,6 +1483,18 @@
 														<span className="prof-badge" title={proficientSpecies(item, species).map(s => `${s} proficiency (${SPECIES_PROFICIENCY[s]}): 10% chance of double yield`).join('\n')}>
 															{'⚒ '}
 															{proficientSpecies(item, species).map(s => (
+																<img key={s} src={SPECIES_ICONS[s]} alt={s} className="liked-badge"/>
+															))}
+														</span>
+													}
+													{comfortedSpecies(item, species).length > 0 &&
+														<span className="comfort-badge" title={comfortedSpecies(item, species).map(s =>
+															s === 'Fox'
+																? `${s} comfort (${SPECIES_COMFORT[s]}): +5 Resolve when 3 or more Foxes work here`
+																: `${s} comfort (${SPECIES_COMFORT[s]}): +5 Resolve while working here`
+														).join('\n')}>
+															{'♥ '}
+															{comfortedSpecies(item, species).map(s => (
 																<img key={s} src={SPECIES_ICONS[s]} alt={s} className="liked-badge"/>
 															))}
 														</span>
@@ -1413,7 +1532,10 @@
 			];
 
 			const TabsComponent = () => {
-				const [activeTab, setActiveTab] = useState(TABS[0].id);
+				const savedActiveTab = loadSavedState().activeTab;
+				const [activeTab, setActiveTab] = useState(TABS.some(tab => tab.id === savedActiveTab) ? savedActiveTab : TABS[0].id);
+
+				useEffect(() => saveState({ activeTab }), [activeTab]);
 
 				return (
 					<div>
@@ -1427,6 +1549,9 @@
 									{tab.label}
 								</button>
 							))}
+						</div>
+						<div className="state-tools">
+							<button type="button" className="state-reset" onClick={resetSavedState}>Reset saved state</button>
 						</div>
 						<div className="tab-content">
 							{TABS.find(tab => tab.id === activeTab).content}
