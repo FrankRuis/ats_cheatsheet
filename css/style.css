@@ -1,39 +1,119 @@
+/*
+ * Variables from the official wiki's site stylesheet:
+ * https://wiki.hoodedhorse.com/Against_the_Storm/MediaWiki:Mbhh.css
+ * (revision 12287, 2026-10-28). The wiki's per-variable descriptions are there.
+ * Lines marked "CHEATSHEET:" are not from the wiki; keep them when re-syncing.
+ * Left out on purpose: the wiki's variables marked TODO REMOVE (--ats-body,
+ * --ats-heading, --ats-mono, --ats-condensed, --ats-default). Use the
+ * --ats-font-* and --ats-color-white replacements instead.
+ */
 :root {
-    --ats-body: 'Noto Sans';
-    --ats-heading: 'EB Garamond';
-    --ats-mono: 'Noto Sans Mono';
-    --ats-condensed: 'Asap Condensed';
-    --ats-default: #e0e0d0;
-    --ats-dark: #0e100a;
-    --ats-yellow: #e1aa46;
-    --ats-gold: #a79372;
-    --ats-bright-gold: #e2cd9d;
-    --ats-brown: #59482d;
-    --ats-dark-brown: #302513;
-    --ats-dark-brown-alt: #261d0f;
-    --ats-green: #53b522;
-    --ats-dark-green: #0e1b0d;
-    --ats-dark-green-alt: #122411;
-    --ats-bright-blue: #31b7fa;
-    --ats-bright-blue-highlight: #64c9fb;
-    --ats-bright-blue-brighest: #ade2fd;
-    --ats-bright-blue-dim: #2a9cd4;
-    --ats-blue: #31b7fa;
-    --ats-bright-blue: #92d8fc;
-    --ats-bright-blue-highlight: #b4e5fd;
-    --ats-bright-blue-brighest: #e1f5fe;
-    --ats-bright-blue-dim: #79d0fc;
-	--ats-color-blue-unfilled-resolve: #0b1520;
-    --ats-bright-red: #ff3c00;
-    --ats-bright-green: #87cb64;
-    --ats-bright-green-highlight: #bae1a7;
-    --ats-bright-green-dim: #53B522;
-    --ats-perk-green: #15cf00;
-    --ats-perk-blue: #015db9;
-    --ats-perk-purple: #7f27b9;
-    --ats-perk-orange: #da6d00;
-    --ats-color-green-leather-shadow: #17170D;
-    --ats-color-green-leather-shadow-lighter: #1C1C10;
+	/*FONTS*/
+	--ats-font-body: 'Noto Sans';
+	--ats-font-heading: 'EB Garamond';
+	--ats-font-monospace: 'Noto Sans Mono';
+	--ats-font-condensed: 'Asap Condensed';
+
+	/*COLORS*/
+	--ats-color-white: #dedede;
+
+	--ats-dark: #0e0f0a;
+
+	--ats-yellow: #e1aa46;
+
+	--ats-gold: #a79372;
+	--ats-bright-gold: #e2cd9d;
+
+	--ats-brown: #59482d;
+	--ats-dark-brown: #302513;
+	--ats-dark-brown-alt: #261d0f;
+
+	--ats-green: #53b522;
+	--ats-dark-green: #0e1b0d;
+	--ats-dark-green-alt: #122411;
+
+	--ats-blue: #31b7fa;
+	--ats-bright-blue: #92d8fc;
+	--ats-bright-blue-highlight: #b4e5fd;
+	--ats-bright-blue-brightest: #e1f5fe; /* CHEATSHEET: spelling fixed; the wiki has "brighest" */
+	--ats-bright-blue-dim: #79d0fc;
+
+	/*YELLOWS AND BROWNS*/
+	--ats-color-green-leather-shadow: #17170D;
+	--ats-color-green-leather-shadow-lighter: #1C1C10;
+
+	/*BROWNS*/
+	--ats-color-tan-headings-text: #c0a777;
+	--ats-color-gold-names-text: #f0b022;
+	--ats-color-tan-widget-expand: #8F7B5C;
+	--ats-color-brown-wood-bright: #B0A880;
+	--ats-color-brown-wood-light: #807755;
+	--ats-color-brown-wood-medium: #66553B;
+	--ats-color-brown-wood-dark: #2A261F;
+	--ats-color-brown-wood-shadow: #211E19;
+
+	/*REDS*/
+	--ats-color-red-penalty-text: #f62800;
+	--ats-color-red-effect-brilliant: #fe4520;
+	--ats-color-red-bold-building: #be2b20;
+	--ats-color-red-effect-very-dark: #2C0000;
+	--ats-color-red-rusty-light: #884033;
+	--ats-color-red-rusty: #77311A;
+	--ats-color-red-faded: #521e25;
+	--ats-color-red-muted-dark: #351515;
+	--ats-color-red-faded-dark: #331f23;
+
+	/*BLUES AND CYANS*/
+	--ats-color-cyan-reputation-brilliant-lighter: #68D4F8;
+	--ats-color-cyan-reputation-brilliant: #10d1f4;
+	--ats-color-cyan-resolve-text: #33aad0;
+	--ats-color-cyan-resolve: #21728a;
+	--ats-color-cyan-bold-medium: #1e3e5e;
+	--ats-color-cyan-bold-dark: #071727;
+	--ats-color-cyan-very-dark: #0b1520;
+	--ats-color-blue-news-hyperlink: #40a0ff;
+	--ats-color-blue-aesthetics: #6099f0;
+	--ats-color-blue-perk: #1166dd;
+	--ats-color-purple-perk: #8833cc; /* CHEATSHEET: added manually from the wiki's PerkPurple color template */
+	--ats-color-orange-perk: #dd7700; /* CHEATSHEET: added manually from the wiki's PerkOrange color template */
+	--ats-color-aqua-hub-effect-brilliant: #92f0e2;
+	--ats-color-aqua-hub-effect: #5ccec6;
+	--ats-color-bluegray-very-light: #acc7d1;
+	--ats-color-bluegray-hearth: #4f7881;
+	--ats-color-bluegray-medium: #2c435a;
+	--ats-color-bluegray-terrain: #202838;
+	--ats-color-bluegray-dark: #1a222e;
+
+	/*GREENS*/
+	--ats-color-green-title-brilliant: #c2fe14;
+	--ats-color-green-perk: #22cc00;
+	--ats-color-green-comfort: #44dd55;
+	--ats-color-green-effect-bright: #42bb31;
+	--ats-color-green-status-text: #50b010;
+	--ats-color-green-bold-medium: #204101;
+	--ats-color-green-effect-very-dark: #052009;
+	--ats-color-green-mid-highlight-lightened: #b0e7a2;
+	--ats-color-green-mid-highlight: #71c05c;
+	--ats-color-green-mid-medium: #223311;
+	--ats-color-green-mid-deep: #040d05;
+	--ats-color-green-dim-muted: #172011;
+	--ats-color-green-dim-very-muted: #141a12;
+
+	/*IMAGES (wiki-relative paths; not used by the cheatsheet)*/
+	--ats-image-background-black-leather: url('/images/mbhh_ats/2/2e/BG_Black_01.png');
+	--ats-image-background-green-leather: url('/images/mbhh_ats/2/2b/BG_Green_03.png');
+	--ats-image-background-green-leather-worn: url('/images/mbhh_ats/7/7e/BG_Green_01.png');
+	--ats-image-background-tan-leather: url('/images/mbhh_ats/0/0f/BG_Skin.png');
+	--ats-image-background-tan-leather-two-panel: url('/images/mbhh_ats/6/6a/Skin_BG_Small_3.png');
+	--ats-image-background-tooltip: url('/images/mbhh_ats/b/b4/Popup_Tooltips_BG.png');
+	--ats-image-background-heavy-right-floating-window: url('/images/mbhh_ats/c/c3/Popup_RightPanel_BG.png');
+	--ats-image-border-header-with-double-line: url('/images/mbhh_ats/c/cd/Popup_SeperationBGPattern2_empty.png');
+	--ats-image-border-gold-thick-beveled: url('/images/mbhh_ats/0/06/FRAME_Tex_Square_Big_1.png');
+	--ats-image-border-brown-thick-beveled: url('/images/mbhh_ats/1/1b/FRAME_Tex_Square_Small_2.png');
+	--ats-image-border-circle-gold-thick-beveled: url('/images/mbhh_ats/f/f7/FRAME_Circle_84x84_RaceHud.png');
+	--ats-image-border-rectangle-cornercut-twotone: url('/images/mbhh_ats/0/02/Popup_BG_Panel_1.png');
+	--ats-image-border-brown-thin-filigree: url('/images/mbhh_ats/c/c3/Popup_Seperation8.png');
+	--ats-image-icon-hourglass: url('/images/mbhh_ats/1/1f/Hourglass_Icon_.png');
 }
 
 body {
@@ -71,7 +151,7 @@ hr {
 .tabs button {
 	color: var(--ats-yellow, gold);
 	font-variant: small-caps;
-    font-family: var(--ats-heading),serif;
+    font-family: var(--ats-font-heading),serif;
     font-size: 14pt;
     font-weight: 500;
     letter-spacing: 0.12em;
@@ -109,8 +189,8 @@ caption, .mw-headline, h1.mw-first-heading, #mw-toc-heading, .mw-portlet-body .m
 }
 
 p, td, th, li, dd, caption, .mw-headline, h1.mw-first-heading, .thumbcaption, .toc, .usermessage, .ats-infobox-header-title {
-    color: var(--ats-default,white);
-    font-family: var(--ats-body),sans-serif;
+    color: var(--ats-color-white,white);
+    font-family: var(--ats-font-body),sans-serif;
     font-weight: 300;
     font-size: 11pt;
     line-height: 1.7em;
@@ -160,7 +240,7 @@ img {
     text-align: center; /* Center the text */
 	color: var(--ats-yellow, gold);
     font-variant: small-caps;
-    font-family: var(--ats-heading), serif;
+    font-family: var(--ats-font-heading), serif;
     font-size: 12pt;
     font-weight: 500;
     letter-spacing: 0.12em;
@@ -184,7 +264,7 @@ img {
     height: 1.7em;
     padding: 0.4em 4.5em 0.2em 2em;
     background: var(--ats-dark);
-	color:  var(--ats-default, #e0e0d0);
+	color:  var(--ats-color-white, #dedede);
 }
 
 button.cat-active {
@@ -241,7 +321,7 @@ table.data-table > * > tr:nth-child(odd) {
 }
 
 .data-table th {
-	background-color: var(--ats-color-blue-unfilled-resolve);
+	background-color: var(--ats-color-cyan-very-dark);
 	border: 2px solid var(--ats-dark, black);
     cursor: pointer; /* Make header clickable for sorting */
 }
@@ -254,7 +334,7 @@ table.data-table > * > tr:hover {
 table.data-table > tbody > tr.category-row,
 table.data-table > tbody > tr.category-row:nth-child(odd),
 table.data-table > tbody > tr.category-row:hover {
-    background-color: var(--ats-color-blue-unfilled-resolve);
+    background-color: var(--ats-color-cyan-very-dark);
 }
 
 .data-table .category-row td {
@@ -285,7 +365,7 @@ button.flawless-toggle {
 	border-radius: 3px;
 	color: var(--ats-gold);
 	cursor: pointer;
-	font-family: var(--ats-body), sans-serif;
+	font-family: var(--ats-font-body), sans-serif;
 	font-size: 10pt;
 	margin-left: 8px;
 	padding: 5px 9px;
@@ -437,8 +517,8 @@ caption, .mw-headline, h1.mw-first-heading, #mw-toc-heading, .mw-portlet-body .m
 }
 
 p, td, th, li, dd, caption, .mw-headline, h1.mw-first-heading, .thumbcaption, .toc, .usermessage, .ats-infobox-header-title {
-    color: var(--ats-default,white);
-    font-family: var(--ats-body),sans-serif;
+    color: var(--ats-color-white,white);
+    font-family: var(--ats-font-body),sans-serif;
     font-weight: 300;
     font-size: 11pt;
     line-height: 1.7em;
@@ -447,7 +527,7 @@ p, td, th, li, dd, caption, .mw-headline, h1.mw-first-heading, .thumbcaption, .t
 }
 
 caption, dt, .ats-flavor-text, .ats-flavor-text p, .mw-headline, h1.mw-first-heading, #mw-toc-heading, .mw-portlet-body .mw-list-item, .ats-infobox-header-title {
-    font-family: var(--ats-heading),serif;
+    font-family: var(--ats-font-heading),serif;
     font-size: 14pt;
     font-weight: 500;
     letter-spacing: 0.12em;
@@ -460,13 +540,13 @@ table.ats-table-recipe th {
 }
 
 .ats-table-recipe th, .ats-table-recipe td {
-    font-family: var(--ats-condensed,sans-serif);
+    font-family: var(--ats-font-condensed,sans-serif);
     font-size: 10.5pt;
     text-transform: uppercase;
 }
 
 th {
-    color: var(--ats-default,white);
+    color: var(--ats-color-white,white);
     font-weight: 400;
 }
 
@@ -711,8 +791,8 @@ input:checked + .slider:before {
 	align-items: center;
 	gap: 8px;
 	cursor: pointer;
-	color: var(--ats-default, white);
-	font-family: var(--ats-body), sans-serif;
+	color: var(--ats-color-white, white);
+	font-family: var(--ats-font-body), sans-serif;
 	font-weight: 300;
 	font-size: 11pt;
 	line-height: 1.7em;
@@ -861,10 +941,10 @@ table.data-table tr.suggestor-row-dimmed td img {
 }
 
 .legend-text {
-    color: var(--ats-default, #e0e0d0);
+    color: var(--ats-color-white, #dedede);
     font-variant: small-caps;
     font-size: 14pt;
-	font-family: var(--ats-heading),serif;
+	font-family: var(--ats-font-heading),serif;
 }
 
 /* Font awesome icons */
@@ -877,12 +957,12 @@ h1 > a > .svg-inline--fa {
 }
 
 h1 > a > .svg-inline--fa:hover {
-    color: var(--ats-default, #e0e0d0);
+    color: var(--ats-color-white, #dedede);
 }
 
 .data-version {
 	color: var(--ats-gold);
-	font-family: var(--ats-body), sans-serif;
+	font-family: var(--ats-font-body), sans-serif;
 	font-size: 10pt;
 	letter-spacing: 0.08em;
 	margin: -12px 0 12px;
