@@ -18,7 +18,7 @@ If you download the files I'm currently pulling from CDNs in the `index.html` he
 - The selected ingredient will filter the buildings table on buildings that can produce that ingredient.
 
 ## Species Needs
-- Click on any of the species to enable them, click again to disable, select up to 4 species at a time (4 requires the Sacred Grove world map modifier).
+- Click on any of the species to enable them, click again to disable, select up to 4 species at a time (4 requires the Sacred Grove World Map modifier).
 - Colored rings around the needs and species indicate which species require which needs.
 - Needs with multiple colors are shared by multiple selected species.
 
