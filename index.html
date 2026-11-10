@@ -86,6 +86,68 @@
 				overlappingNeeds[need].push(species);
 			  }
 			}
+			const MAX_SPECIES = 4; // 4 only with the Sacred Grove world map modifier
+			const SACRED_GROVE_WARNING = '4 species is only possible with the Sacred Grove world map modifier.';
+
+			// Shown when exactly 4 species are selected. Focusable so the tooltip also opens on tap.
+			const SacredGroveWarning = ({ count }) => count === MAX_SPECIES ? (
+				<span className="sacred-grove-warning" tabIndex={0} role="img" aria-label={SACRED_GROVE_WARNING} data-tooltip={SACRED_GROVE_WARNING}>
+					<i className="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+				</span>
+			) : null;
+
+			// Species ring around each need in the Species Needs grid, styled after the in-game perk frame.
+			const SPECIES_RING_COLORS = ['var(--ats-color-purple-perk)', 'var(--ats-color-orange-perk)', 'var(--ats-color-green-perk)', 'var(--ats-color-blue-perk)'];
+
+			// Each selected species keeps its color until it is deselected; a newly selected one takes the lowest free color.
+			const assignSpeciesColors = (selection, previous = {}) => {
+				const colors = {};
+				for (const name of selection) {
+					const color = previous[name];
+					if (Number.isInteger(color) && color >= 0 && color < MAX_SPECIES && !Object.values(colors).includes(color)) colors[name] = color;
+				}
+				for (const name of selection) {
+					if (!(name in colors)) colors[name] = SPECIES_RING_COLORS.findIndex((_, i) => !Object.values(colors).includes(i));
+				}
+				return colors;
+			};
+
+			// Ring parts for 1-4 selected species, in reading order (left to right, then the bottom).
+			// Each part: [colored size, position, black outline size]. Outline sizes are measured on the
+			// outline box, which is 1px larger on every side. --ring-t is the ring thickness.
+			const SPECIES_RING_PARTS = {
+				1: [['100% 100%', 'left top', '100% 100%']],
+				2: [['calc(50% - 1px) 100%', 'left top', '50% 100%'],
+					['calc(50% - 1px) 100%', 'right top', '50% 100%']],
+				3: [['calc(50% - 1px) calc(100% - var(--ring-t) - 2px)', 'left top', '50% calc(100% - var(--ring-t) - 2px)'],
+					['calc(50% - 1px) calc(100% - var(--ring-t) - 2px)', 'right top', '50% calc(100% - var(--ring-t) - 2px)'],
+					['100% var(--ring-t)', 'left bottom', '100% calc(var(--ring-t) + 2px)']],
+				4: [['calc(50% - 1px) calc(50% - 1px)', 'left top', '50% 50%'],
+					['calc(50% - 1px) calc(50% - 1px)', 'right top', '50% 50%'],
+					['calc(50% - 1px) calc(50% - 1px)', 'left bottom', '50% 50%'],
+					['calc(50% - 1px) calc(50% - 1px)', 'right bottom', '50% 50%']],
+			};
+
+			// Wraps an icon so the ring can be drawn at the icon's own edge, inside its brown frame
+			const SpeciesRing = ({ style, children }) => (
+				<span className={`species-ring${style ? ' has-ring' : ''}`} style={style || undefined}>{children}</span>
+			);
+
+			// parts: one color (or null for an empty part) per selected species, in grid order
+			const speciesRingStyle = (parts) => {
+				const layout = SPECIES_RING_PARTS[parts.length];
+				if (!layout || parts.every(color => !color)) return null;
+				const shown = layout.filter((_, i) => parts[i]);
+				const colors = parts.filter(color => color);
+				return {
+					'--ring-img': colors.map(color => `linear-gradient(${color}, ${color})`).join(', '),
+					'--ring-size': shown.map(part => part[0]).join(', '),
+					'--ring-pos': shown.map(part => part[1]).join(', '),
+					'--ring-bk-img': colors.map(() => 'linear-gradient(#000, #000)').join(', '),
+					'--ring-bk-size': shown.map(part => part[2]).join(', '),
+				};
+			};
+
             const SPECIES_ICONS = {
                 'Human': 'img/species/Human_Portrait.png',
                 'Beaver': 'img/species/Beaver_Portrait.png',
@@ -331,41 +393,29 @@
 
             // Needs
             const NeedsGrid = ({ rows, columns }) => {
-				const savedSpecies = loadSavedState().species;
+				const savedNeedsState = loadSavedState();
+				const savedSpecies = savedNeedsState.species;
 				const initialActiveSpecies = Array.isArray(savedSpecies)
-					? savedSpecies.filter(name => name in SPECIES).slice(0, 3)
+					? savedSpecies.filter(name => name in SPECIES).slice(0, MAX_SPECIES)
 					: [];
+				const [speciesColors, setSpeciesColors] = useState(() => assignSpeciesColors(initialActiveSpecies,
+					savedNeedsState.speciesColors && typeof savedNeedsState.speciesColors === 'object' ? savedNeedsState.speciesColors : {}));
 				const [highlightedSet, setHighlightedSet] = useState(initialActiveSpecies.length > 0
 					? initialActiveSpecies.map(name => [...SPECIES[name], name])
 					: null);
 				const [activeSpecies, setActiveSpecies] = useState(initialActiveSpecies.length > 0 ? initialActiveSpecies : null);
 				window.currentSpeciesSelection = activeSpecies ? [...activeSpecies] : [];
 
-                const getColors = (iconName) => {
-                    if (!highlightedSet || !activeSpecies) return [];
-                    var colors = ['purple', 'orange', 'green'];
-                    var active_colors = [];
-                    for (let i = 0; i < highlightedSet.length; i++) {
-                        if (highlightedSet[i].includes(iconName)) active_colors.push(colors[i]);
-                    }
+				// Selected species in grid order (left to right), which sets their place in the ring
+				const ringSpecies = activeSpecies ? Object.keys(SPECIES).filter(name => activeSpecies.includes(name)) : [];
+				const wants = (species, iconName) => species === iconName || SPECIES[species].includes(iconName);
 
-                    return active_colors;
-                }
-
-                const getLinearGradient = (colors) => {
-                    let gradient = 'linear-gradient(to right';
-                    const percentage = 100 / colors.length;
-
-                    colors.forEach((color, index) => {
-                        gradient += `, ${color} ${percentage * index}%, ${color} ${percentage * (index + 1)}%`;
-                    });
-
-                    gradient += ')';
-                    return gradient;
-                }
+				const getRingStyle = (iconName) => speciesRingStyle(ringSpecies.map(species =>
+					wants(species, iconName) ? SPECIES_RING_COLORS[speciesColors[species]] : null));
 
 				const getSharedNeedClass = (iconName) => {
-					const sharedCount = getColors(iconName).length;
+					const sharedCount = ringSpecies.filter(species => wants(species, iconName)).length;
+					if (sharedCount === 4) return ' need-shared-four'; // only Coats or Boots
 					if (sharedCount === 3) return ' need-shared-three';
 					if (sharedCount === 2) return ' need-shared-two';
 					return '';
@@ -389,7 +439,7 @@
                                 setActiveSpecies(newActiveSpecies);
                             }
                         } else {
-                            if (activeSpecies.length >= 3) return;  // max 3 species per game
+                            if (activeSpecies.length >= MAX_SPECIES) return;
                             newActiveSpecies.push(iconName);
                             setActiveSpecies(newActiveSpecies);
                         }
@@ -398,10 +448,12 @@
                         setActiveSpecies(newActiveSpecies);
                     }
                     highlightNeeds(newActiveSpecies);
+					const newSpeciesColors = assignSpeciesColors(newActiveSpecies || [], speciesColors);
+					setSpeciesColors(newSpeciesColors);
 
                     // Broadcast for the Best Buildings tab (separate React tree)
                     window.currentSpeciesSelection = newActiveSpecies ? [...newActiveSpecies] : [];
-					saveState({ species: window.currentSpeciesSelection });
+					saveState({ species: window.currentSpeciesSelection, speciesColors: newSpeciesColors });
                     window.dispatchEvent(new CustomEvent('speciesSelection', { detail: window.currentSpeciesSelection }));
                 };
 
@@ -453,6 +505,7 @@
                     <div className="ats-container icon-grid" style={{maxWidth: '590px'}}>
                         <div className="grid-header ats-infobox-header-title">
                             {"Species Needs"}
+                            <SacredGroveWarning count={activeSpecies ? activeSpecies.length : 0} />
                         </div>
                         <div className="icon-grid-wrapper">
                             {grid_header.map((row, rowIndex) => (
@@ -463,9 +516,11 @@
                                     className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}`}
 									id={iconName}
                                     onClick={() => handleIconClick(iconName)}
-                                    style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: (isIconHighlighted(iconName) && activeSpecies) ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
+                                    style={{ borderTop: '5px solid transparent' }}
                                     >
-                                        <img src={SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
+                                        <SpeciesRing style={getRingStyle(iconName)}>
+                                            <img src={SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
+                                        </SpeciesRing>
                                     </div>
                                 ))}
                                 </div>
@@ -478,9 +533,11 @@
                                         key={iconName}
                                         className={`ats-single-ingredient-icon icon${isIconHighlighted(iconName) ? '' : ' icon-inactive'}${getSharedNeedClass(iconName)}`}
                                         onClick={() => handleIconClick(iconName)}
-                                        style={{ borderTop: (isIconHighlighted(iconName) && activeSpecies) ? '5px solid' : '5px solid rgba(0, 0, 0, 0)', borderImage: (isIconHighlighted(iconName) && activeSpecies) ? getLinearGradient(getColors(iconName)) + ' 5' : 'unset' }}
+                                        style={{ borderTop: '5px solid transparent' }}
                                         >
-                                            <img src={SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
+                                            <SpeciesRing style={getRingStyle(iconName)}>
+                                                <img src={SPECIES_ICONS[iconName]} alt={iconName} title={iconName} />
+                                            </SpeciesRing>
                                         </div>
                                     ))
                                 ))}
@@ -1101,7 +1158,7 @@
 				const speciesNames = Object.keys(SPECIES);
 				const recipeBuildingGoods = [...TRANSITIONAL_FOR_NEEDED, ...NEEDED_GOODS, ...OTHER_GOODS];
 				const savedSuggestorSpecies = Array.isArray(savedSuggestorState.suggestorSpecies)
-					? savedSuggestorState.suggestorSpecies.filter(species => speciesNames.includes(species)).slice(0, 3)
+					? savedSuggestorState.suggestorSpecies.filter(species => speciesNames.includes(species)).slice(0, MAX_SPECIES)
 					: [];
 				const [currentRawResources, setCurrentRawResources] = useState(Array.isArray(savedSuggestorState.suggestorRawResources)
 					? savedSuggestorState.suggestorRawResources.filter(resource => RAW_RESOURCES.includes(resource))
@@ -1144,7 +1201,7 @@
 							const next = prev.filter(s => s !== species);
 							return next.length ? next : null;
 						}
-						if (prev.length >= 3) return prev;
+						if (prev.length >= MAX_SPECIES) return prev;
 						return [...prev, species];
 					});
 				};
@@ -1163,7 +1220,10 @@
 				return (
 					<div>
 						<div className="ats-container icon-grid" style={{ maxWidth: '1200px', marginBottom: '15px' }}>
-							<div className="grid-header ats-infobox-header-title">Species</div>
+							<div className="grid-header ats-infobox-header-title">
+								Species
+								<SacredGroveWarning count={activeSpecies ? activeSpecies.length : 0} />
+							</div>
 							<div className="icon-grid-wrapper">
 								<div className="icon-row header-row">
 									{speciesNames.map(species => (
@@ -1444,6 +1504,7 @@
 					<div className="ats-container icon-grid" style={{ minWidth: '850px' }}>
 						<div className="grid-header ats-infobox-header-title">
 							{"Best Buildings"}
+							<SacredGroveWarning count={species.length} />
 						</div>
 						<div className="icon-grid-wrapper">
 							<div className="affinity-picker">
@@ -1462,7 +1523,7 @@
 								</button>
 							</div>
 							{species.length === 0 ?
-								<div className="affinity-hint">Select up to 3 species (here or in the Species Needs grid) to rank buildings by how well their products and worker bonuses match those species.</div>
+								<div className="affinity-hint">Select up to 4 species (4 requires Sacred Grove; here or in the Species Needs grid) to rank buildings by how well their products and worker bonuses match those species.</div>
 							:
 								<table className="data-table">
 									<thead>

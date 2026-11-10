@@ -656,7 +656,8 @@ td:has(> div.ats-building-icon) {
 }
 
 .need-shared-two img,
-.need-shared-three img {
+.need-shared-three img,
+.need-shared-four img {
 	transition: box-shadow 0.2s ease;
 }
 
@@ -668,6 +669,120 @@ td:has(> div.ats-building-icon) {
 	box-shadow:
 		0 0 14px 5px rgba(226, 205, 157, 0.95),
 		0 0 26px 9px rgba(225, 170, 70, 0.50);
+}
+
+/* Only Coats or Boots can be wanted by 4 species (Sacred Grove) */
+.need-shared-four img {
+	box-shadow:
+		0 0 14px 6px rgba(255, 236, 190, 1),
+		0 0 28px 11px rgba(240, 175, 60, 0.75),
+		0 0 42px 16px rgba(225, 120, 40, 0.40);
+}
+
+/*
+ * Species ring: which selected species want each need, styled after the in-game perk frame.
+ * Drawn at the icon's edge, inside its brown frame, with a 1px black outline so it stands
+ * out against busy icon art. The parts and colors come from speciesRingStyle() in index.html.
+ */
+.species-ring {
+	--ring-t: 4px;
+	position: relative;
+	display: inline-flex;
+	margin: 0 2px;
+}
+
+.icon-row .ats-single-ingredient-icon .species-ring img {
+	margin: 0;
+}
+
+.species-ring.has-ring::before,
+.species-ring.has-ring::after {
+	content: '';
+	position: absolute;
+	z-index: 2;
+	box-sizing: border-box;
+	background-repeat: no-repeat;
+	pointer-events: none;
+	/* Keep only the ring: the whole box minus its content box */
+	-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+/* Colored ring, 1px outside the icon */
+.species-ring.has-ring::after {
+	inset: -1px;
+	padding: var(--ring-t);
+	background-image: var(--ring-img);
+	background-size: var(--ring-size);
+	background-position: var(--ring-pos);
+}
+
+/* Black outline: the same parts, 1px larger on every side */
+.species-ring.has-ring::before {
+	inset: -2px;
+	padding: calc(var(--ring-t) + 2px);
+	background-image: var(--ring-bk-img);
+	background-size: var(--ring-bk-size);
+	background-position: var(--ring-pos);
+}
+
+@media only screen and (max-width: 767px) {
+	.species-ring {
+		--ring-t: 3px;
+	}
+}
+
+/* Sacred Grove warning, shown when exactly 4 species are selected */
+.sacred-grove-warning {
+	position: relative;
+	display: inline-block;
+	margin-left: 0.5em;
+	z-index: 20;
+	color: #ffb020;
+	cursor: help;
+	outline: none;
+}
+
+.sacred-grove-warning:focus-visible {
+	outline: 2px solid #ffb020;
+	outline-offset: 2px;
+	border-radius: 3px;
+}
+
+.sacred-grove-warning::after {
+	content: attr(data-tooltip);
+	position: absolute;
+	top: calc(100% + 6px);
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 10;
+	width: max-content;
+	max-width: 260px;
+	padding: 6px 10px;
+	background: #1a1208;
+	border: 1px solid #ffb020;
+	border-radius: 4px;
+	color: #f5e6c8;
+	font-family: 'Noto Sans', sans-serif;
+	font-variant: normal;
+	font-size: 0.8rem;
+	font-weight: normal;
+	letter-spacing: normal;
+	text-transform: none;
+	line-height: 1.3;
+	text-align: left;
+	white-space: normal;
+	pointer-events: none;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.15s ease;
+}
+
+.sacred-grove-warning:hover::after,
+.sacred-grove-warning:focus::after {
+	opacity: 1;
+	visibility: visible;
 }
 
 /* Other */
